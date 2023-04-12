@@ -24,8 +24,9 @@ if Path.cwd().joinpath('src/config.json').exists():
     SLACK_URL = json.load(Path.cwd().joinpath('src/config.json').open('r'))['slack']
     NUM_GPU = json.load(Path.cwd().joinpath('src/config.json').open('r')).get('num_gpu', None)
 
-SCRIPT_NAME = Path(__file__).stem
-LOG_DIR = Path.cwd().joinpath(f'logs/{SCRIPT_NAME}')
+# SCRIPT_NAME = Path(__file__).stem
+foldername = str(datetime.datetime.now().strftime("%m-%d-%H-%M-%S"))
+LOG_DIR = Path.cwd().joinpath(f'logs/{foldername}')
 
 logger = logging.getLogger()
 
@@ -41,7 +42,6 @@ def main(ctx, config_path, debug):
         logger.handlers[-1].setLevel(logging.DEBUG)
         logger.debug("debug")
 
-    foldername = str(datetime.datetime.now().strftime("%m-%d-%H-%M-%S"))
     dump_dir = DUMP_DIR.joinpath(foldername)
     os.mkdir(dump_dir)
     with open(config_path) as f:
@@ -94,7 +94,7 @@ def deepgmm(ctx, num_thread):
 
 
 if __name__ == '__main__':
-    configure_logger(SCRIPT_NAME, log_dir=LOG_DIR, webhook_url=SLACK_URL)
+    configure_logger(foldername, log_dir=LOG_DIR, webhook_url=SLACK_URL)
     try:
         main(obj={})
         logger.critical('===== Script completed successfully! =====')
