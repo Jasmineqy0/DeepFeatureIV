@@ -1,21 +1,21 @@
 cost_fuel: gaussian(mu_=0, sigma_=1)
 cost_fuel->price: identity()
-emotion: deterministic(/home2/qianyun.li/DeepFeatureIV/src/data/parcs_simulation/hetero_0.5/demand.py,
+emotion: deterministic(src/data/parcs_simulation/hetero_0.5/demand.py,
   emotion)
 emotion->outcome: identity()
-noise_demand: deterministic(/home2/qianyun.li/DeepFeatureIV/src/data/parcs_simulation/hetero_0.5/demand.py,
+noise_demand: deterministic(src/data/parcs_simulation/hetero_0.5/demand.py,
   noise_demand)
 noise_demand->outcome: identity()
 noise_price: gaussian(mu_=0, sigma_=1)
 noise_price->noise_demand: identity()
 noise_price->price: identity()
-outcome: deterministic(/home2/qianyun.li/DeepFeatureIV/src/data/parcs_simulation/hetero_0.5/demand.py,
+outcome: deterministic(src/data/parcs_simulation/hetero_0.5/demand.py,
   outcome)
-phi_t: deterministic(/home2/qianyun.li/DeepFeatureIV/src/data/parcs_simulation/hetero_0.5/demand.py,
+phi_t: deterministic(src/data/parcs_simulation/hetero_0.5/demand.py,
   phi_t)
 phi_t->outcome: identity()
 phi_t->price: identity()
-price: deterministic(/home2/qianyun.li/DeepFeatureIV/src/data/parcs_simulation/hetero_0.5/demand.py,
+price: deterministic(src/data/parcs_simulation/hetero_0.5/demand.py,
   price)
 price->noise_demand: identity()
 price->outcome: identity()

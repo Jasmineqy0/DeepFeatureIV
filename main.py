@@ -8,6 +8,8 @@ from shutil import copyfile, make_archive
 import os
 from os import PathLike
 import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
 
 from src.utils.custom_logging import configure_logger
@@ -25,7 +27,7 @@ if Path.cwd().joinpath('src/config.json').exists():
     NUM_GPU = json.load(Path.cwd().joinpath('src/config.json').open('r')).get('num_gpu', None)
 
 # SCRIPT_NAME = Path(__file__).stem
-SCRIPT_NAME = 'dfiv_parcs_hetero_1'
+SCRIPT_NAME = os.getenv('EXP_NAME')
 LOG_DIR = Path.cwd().joinpath(f'logs/{SCRIPT_NAME}')
 
 logger = logging.getLogger()
@@ -43,7 +45,7 @@ def main(ctx, config_path, debug):
         logger.debug("debug")
 
     dump_dir = DUMP_DIR.joinpath(SCRIPT_NAME)
-    os.mkdir(dump_dir)
+    os.makedirs(dump_dir, exist_ok=True)
     with open(config_path) as f:
         config = json.load(f)
     ctx.obj["data_dir"] = dump_dir

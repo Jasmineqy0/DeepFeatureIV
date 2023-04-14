@@ -66,7 +66,7 @@ def experiments(alg_name: str,
 
     for dump_name, data_param in grid_search_dict(org_data_config):
         one_dump_dir = dump_dir.joinpath(dump_name)
-        os.mkdir(one_dump_dir)
+        os.makedirs(one_dump_dir, exist_ok=True)
         tasks = [remote_run.remote(alg_name, data_param, train_config,
                                    use_gpu, one_dump_dir, idx, verbose) for idx in range(n_repeat)]
         res = ray.get(tasks)
