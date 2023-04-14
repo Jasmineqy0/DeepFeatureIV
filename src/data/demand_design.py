@@ -74,7 +74,7 @@ def generate_train_demand_design(data_size: int,
     exp_name = os.getenv('EXP_NAME')
     if exp_name != 'dfiv':
         # simulation by parcs
-        exp_name = exp_name.split('_')[-1]
+        exp_name = exp_name[5:]
 
         hetero = os.getenv('HETERO')
         sigma = os.getenv('SIGMA')
