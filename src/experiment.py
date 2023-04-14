@@ -37,7 +37,7 @@ def run_one(alg_name: str, data_param: Dict[str, Any], train_config: Dict[str, A
     one_dump_dir = None
     if dump_dir_root is not None:
         one_dump_dir = dump_dir_root.joinpath(f"{experiment_id}/")
-        os.mkdir(one_dump_dir)
+        os.makedirs(one_dump_dir, exist_ok=True)
     trainer = Trainer_cls(data_param, train_config, use_gpu, one_dump_dir)
     return trainer.train(experiment_id, verbose)
 
