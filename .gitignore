@@ -4,3 +4,7 @@ logs
 .mypy_cache
 __pycache__
 venv
+.nfs*
+*.log
+viz/.ipynb_checkpoints
+viz/iframe_figures

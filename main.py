@@ -25,8 +25,8 @@ if Path.cwd().joinpath('src/config.json').exists():
     NUM_GPU = json.load(Path.cwd().joinpath('src/config.json').open('r')).get('num_gpu', None)
 
 # SCRIPT_NAME = Path(__file__).stem
-foldername = str(datetime.datetime.now().strftime("%m-%d-%H-%M-%S"))
-LOG_DIR = Path.cwd().joinpath(f'logs/{foldername}')
+SCRIPT_NAME = 'dfiv_parcs_hetero_1'
+LOG_DIR = Path.cwd().joinpath(f'logs/{SCRIPT_NAME}')
 
 logger = logging.getLogger()
 
@@ -42,7 +42,7 @@ def main(ctx, config_path, debug):
         logger.handlers[-1].setLevel(logging.DEBUG)
         logger.debug("debug")
 
-    dump_dir = DUMP_DIR.joinpath(foldername)
+    dump_dir = DUMP_DIR.joinpath(SCRIPT_NAME)
     os.mkdir(dump_dir)
     with open(config_path) as f:
         config = json.load(f)
@@ -94,7 +94,7 @@ def deepgmm(ctx, num_thread):
 
 
 if __name__ == '__main__':
-    configure_logger(foldername, log_dir=LOG_DIR, webhook_url=SLACK_URL)
+    configure_logger(SCRIPT_NAME, log_dir=LOG_DIR, webhook_url=SLACK_URL)
     try:
         main(obj={})
         logger.critical('===== Script completed successfully! =====')

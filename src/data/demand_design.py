@@ -68,24 +68,27 @@ def generate_train_demand_design(data_size: int,
     -------
     train_data : TrainDataSet
     """
-    # # simulation by parcs
-    # sample_data = parcs_simulate(os.path.join(os.getcwd() ,'src/data/parcs_simulation/hetero/demand.yml'), data_size, rho, rand_seed, True, 1.5)
-    # emotion = sample_data['emotion'].to_numpy()
-    # time = sample_data['time'].to_numpy()
-    # cost = sample_data['cost_fuel'].to_numpy()
-    # price = sample_data['price'].to_numpy()
-    # structural = sample_data['outcome'].to_numpy() - sample_data['noise_demand'].to_numpy()
-    # outcome = sample_data['outcome'].to_numpy()
 
-    rng = default_rng(seed=rand_seed)
-    emotion = rng.choice(list(range(1, 8)), data_size)
-    time = rng.uniform(0, 10, data_size)
-    cost = rng.normal(0, 1.0, data_size)
-    noise_price = rng.normal(0, 1.0, data_size)
-    noise_demand = rho * noise_price + rng.normal(0, np.sqrt(1 - rho ** 2), data_size)
-    price = 25 + (cost + 3) * psi(time) + noise_price
-    structural: np.ndarray = f(price, time, emotion).astype(float)
-    outcome: np.ndarray = (structural + noise_demand).astype(float)
+    # # simulation by parcs
+    # sample_data = parcs_simulate(os.path.join(os.getcwd() ,'src/data/parcs_simulation/original/demand.yml'), data_size, rho, rand_seed)
+    sample_data = parcs_simulate(os.path.join(os.getcwd() ,'src/data/parcs_simulation/hetero_1/demand.yml'), data_size, rho, rand_seed, True, 0.5)
+    emotion = sample_data['emotion'].to_numpy()
+    time = sample_data['time'].to_numpy()
+    cost = sample_data['cost_fuel'].to_numpy()
+    price = sample_data['price'].to_numpy()
+    structural = sample_data['outcome'].to_numpy() - sample_data['noise_demand'].to_numpy()
+    outcome = sample_data['outcome'].to_numpy()
+
+    # rng = default_rng(seed=rand_seed)
+    # emotion = rng.choice(list(range(1, 8)), data_size)
+    # time = rng.uniform(0, 10, data_size)
+    # cost = rng.normal(0, 1.0, data_size)
+    # noise_price = rng.normal(0, 1.0, data_size)
+    # noise_demand = rho * noise_price + rng.normal(0, np.sqrt(1 - rho ** 2), data_size)
+    # price = 25 + (cost + 3) * psi(time) + noise_price
+    # structural: np.ndarray = f(price, time, emotion).astype(float)
+    # outcome: np.ndarray = (structural + noise_demand).astype(float)
+
     if old_flg:
         treatment = np.c_[price, time, emotion]
         instrumental = np.c_[cost, time, emotion]
