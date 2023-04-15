@@ -12,12 +12,5 @@ def outcome(data):
 def emotion(data):
     return np.random.choice(7, len(data), replace=True) + 1
 
-def rescale_price(price):
-    psd = 3.7
-    pmu = 17.779
-    return (price - pmu) / psd
-
 def noise_demand(data):
-    rescaled_price = data['price'] / 25
-    return np.random.normal(data['rho']*data['noise_price'], rescaled_price *(1-data['rho']**2), size=len(data))
-
+    return np.random.normal(data['rho']*data['noise_price'], 1-data['rho']**2, size=len(data))

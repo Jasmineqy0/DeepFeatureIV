@@ -5,6 +5,7 @@ import logging
 from typing import Tuple, TypeVar
 import os
 from dotenv import load_dotenv
+import wandb
 load_dotenv()
 
 from ..data.data_class import TrainDataSet, TestDataSet
@@ -76,10 +77,12 @@ def generate_train_demand_design(data_size: int,
         # simulation by parcs
         exp_name = exp_name[5:]
 
+        # get env variables
         hetero = os.getenv('HETERO')
         sigma = os.getenv('SIGMA')
 
-        sample_data = parcs_simulate(f'src/data/parcs_simulation/{exp_name}/demand.yml', data_size, rho, rand_seed, hetero, sigma)
+        # simulate data
+        sample_data = parcs_simulate(f'src/data/parcs_simulation/configs/demand_{exp_name}.yml', data_size, rho, rand_seed, hetero, sigma)
         emotion = sample_data['emotion'].to_numpy()
         time = sample_data['time'].to_numpy()
         cost = sample_data['cost_fuel'].to_numpy() 

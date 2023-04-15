@@ -9,6 +9,7 @@ import os
 from os import PathLike
 import datetime
 from dotenv import load_dotenv
+import wandb
 load_dotenv()
 
 
@@ -38,6 +39,7 @@ logger = logging.getLogger()
 @click.option('--debug/--release', default=False)
 @click.pass_context
 def main(ctx, config_path, debug):
+
     if(debug):
         # Change logging level to debug
         logger.setLevel(logging.DEBUG)

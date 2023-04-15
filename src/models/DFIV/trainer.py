@@ -8,6 +8,7 @@ import copy
 
 from sklearn.model_selection import train_test_split
 import numpy as np
+import wandb
 
 from src.models.DFIV.nn_structure import build_extractor
 from src.models.DFIV.monitor import DFIVMonitor
@@ -112,6 +113,7 @@ class DFIVTrainer(object):
 
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
                         self.add_stage1_intercept, self.add_stage2_intercept)
+        wandb.watch(mdl)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
