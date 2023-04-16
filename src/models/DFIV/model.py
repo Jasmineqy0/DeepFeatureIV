@@ -32,6 +32,8 @@ class DFIVModel:
         self.add_stage1_intercept = add_stage1_intercept
         self.add_stage2_intercept = add_stage2_intercept
 
+        if bool(os.getenv('wandb')):
+            wandb.watch((self.instrumental_net, self.treatment_net, self.covariate_net))
 
     @staticmethod
     def augment_stage1_feature(instrumental_feature: torch.Tensor,
@@ -88,7 +90,9 @@ class DFIVModel:
         pred = linear_reg_pred(feature, stage2_weight)
         stage2_loss = torch.norm((outcome_2nd_t - pred)) ** 2 + lam2 * torch.norm(stage2_weight) ** 2
         if bool(os.getenv('wandb')):
-            wandb.log({"stage 2 loss": stage2_loss})
+
+            wandb.log({"stage 2 loss": stage2_loss,
+                       "stage 2 loss without weights": torch.norm((outcome_2nd_t - pred)) ** 2 })
 
         return dict(stage1_weight=stage1_weight,
                     predicted_treatment_feature=predicted_treatment_feature,

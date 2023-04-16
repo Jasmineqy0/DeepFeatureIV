@@ -117,13 +117,13 @@ class DFIVTrainer(object):
 
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
                         self.add_stage1_intercept, self.add_stage2_intercept)
-        if bool(os.getenv('wandb')):
-            wandb.watch(mdl)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
 
         oos_loss: float = mdl.evaluate_t(test_data_t).data.item()
+        wandb.log({'out of sample loss': oos_loss})
+        wandb.finish()
         return oos_loss
 
     def split_train_data(self, train_data: TrainDataSet):
