@@ -19,6 +19,8 @@ def parcs_simulate(parcs_config_yml, data_size, rho, rand_seed, hetero=False, si
     nodes, edges = graph_file_parser(parcs_config_yml)
     g = Graph(nodes=nodes, edges=edges)
     samples = g.sample(size=data_size)
+
+    np.random.seed(42)
     return samples
 
 if __name__ == '__main__':
