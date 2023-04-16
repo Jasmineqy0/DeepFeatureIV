@@ -1,1 +1,1 @@
-nohup python main.py final_configs/dfiv_low_dim/configs.json dfiv >& /dev/null &
+nohup python main.py final_configs/dfiv_low_dim/configs.json dfiv >& test.log &

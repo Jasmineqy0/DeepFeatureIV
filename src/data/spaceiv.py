@@ -75,7 +75,7 @@ def get_vars(sample_dir, data_size):
     instruments = data[[col for col in data_columns if 'i' in col.lower()]].to_numpy()
     treatments = data[parents].to_numpy()
     covariates = data[[col for col in data_columns if 'x' in col.lower() and col not in parents]].to_numpy()
-    outcome = data[outcome_key].to_numpy()
+    outcome = data[outcome_key].to_numpy()[:, np.newaxis]
 
     config_file = os.path.join(sample_dir, 'config.yml')
     with open(config_file, 'r') as f:
