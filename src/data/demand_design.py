@@ -78,7 +78,7 @@ def generate_train_demand_design(data_size: int,
         exp_name = exp_name[5:]
 
         # get env variables
-        hetero = os.getenv('HETERO')
+        hetero = bool(os.getenv('HETERO'))
         sigma = os.getenv('SIGMA')
 
         # simulate data

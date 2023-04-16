@@ -95,7 +95,7 @@ class DFIVTrainer(object):
             new_rand_seed = np.random.randint(1e5)
             new_data_config = copy.copy(self.data_config)
             new_rand_seed = rand_seed if new_data_config['data_name'] == 'spaceiv' else new_rand_seed
-            new_data_config["data_size"] = os.getenv('spaceiv_val_size')
+            new_data_config["data_size"] = int(os.getenv('spaceiv_val_size'))
             validation_data = generate_train_data(rand_seed=new_rand_seed, **self.data_config)
             validation_data_t = TrainDataSetTorch.from_numpy(validation_data)
             if self.gpu_flg:
