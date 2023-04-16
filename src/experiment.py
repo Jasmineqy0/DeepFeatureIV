@@ -43,13 +43,13 @@ def run_one(alg_name: str, data_param: Dict[str, Any], train_config: Dict[str, A
         os.makedirs(one_dump_dir, exist_ok=True)
     trainer = Trainer_cls(data_param, train_config, use_gpu, one_dump_dir)
 
-    # set up  wandb logging
+    # set up wandb logging
     if bool(os.getenv('wandb')):
         config = {'hetero': bool(os.getenv('HETERO')), 'sigma': float(os.getenv('SIGMA')), 
                 'data_size': data_param['data_size']}
         if 'rho' in data_param:
             data_param = data_param['rho']
-        name = os.getenv('EXP_NAME') + '|' + dump_dir_root.name
+        name = os.getenv('EXP_NAME') + f'| {experiment_id} ' + '|' + dump_dir_root.name
         wandb.init(project='dfiv', name=name, config=config)
 
     return trainer.train(experiment_id, verbose)

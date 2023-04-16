@@ -6,7 +6,7 @@
         "spaceiv_datadir": "/home/qyl/Desktop/projects/ma-ci/spaceIV/data",
         "data_size": [
             1600,
-            6400
+            3200
         ]
     },
     "train_params": {
