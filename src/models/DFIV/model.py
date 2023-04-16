@@ -4,7 +4,10 @@ from torch import nn
 import numpy as np
 import logging
 
+from dotenv import load_dotenv
+load_dotenv()
 import wandb
+import os
 
 from src.utils.pytorch_linear_reg_utils import fit_linear, linear_reg_pred, outer_prod, add_const_col
 from src.data.data_class import TrainDataSet, TestDataSet, TrainDataSetTorch, TestDataSetTorch
@@ -84,7 +87,8 @@ class DFIVModel:
         stage2_weight = fit_linear(outcome_2nd_t, feature, lam2)
         pred = linear_reg_pred(feature, stage2_weight)
         stage2_loss = torch.norm((outcome_2nd_t - pred)) ** 2 + lam2 * torch.norm(stage2_weight) ** 2
-        wandb.log({"stage 2 loss": stage2_loss})
+        if bool(os.getenv('wandb')):
+            wandb.log({"stage 2 loss": stage2_loss})
 
         return dict(stage1_weight=stage1_weight,
                     predicted_treatment_feature=predicted_treatment_feature,

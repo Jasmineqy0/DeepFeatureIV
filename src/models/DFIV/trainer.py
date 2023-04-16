@@ -9,6 +9,9 @@ import copy
 from sklearn.model_selection import train_test_split
 import numpy as np
 import wandb
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from src.models.DFIV.nn_structure import build_extractor
 from src.models.DFIV.monitor import DFIVMonitor
@@ -80,7 +83,7 @@ class DFIVTrainer(object):
             The performance of model evaluated by oos
         """
         train_data = generate_train_data(rand_seed=rand_seed, **self.data_config)
-        test_data = generate_test_data(**self.data_config)
+        test_data = generate_test_data(rand_seed=rand_seed, **self.data_config)
         train_1st_t, train_2nd_t = self.split_train_data(train_data)
         test_data_t = TestDataSetTorch.from_numpy(test_data)
         if self.gpu_flg:
@@ -91,7 +94,8 @@ class DFIVTrainer(object):
         if self.monitor is not None:
             new_rand_seed = np.random.randint(1e5)
             new_data_config = copy.copy(self.data_config)
-            new_data_config["data_size"] = 5000
+            new_rand_seed = rand_seed if new_data_config['data_name'] == 'spaceiv' else new_rand_seed
+            new_data_config["data_size"] = os.getenv('spaceiv_val_size')
             validation_data = generate_train_data(rand_seed=new_rand_seed, **self.data_config)
             validation_data_t = TrainDataSetTorch.from_numpy(validation_data)
             if self.gpu_flg:
@@ -113,7 +117,8 @@ class DFIVTrainer(object):
 
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
                         self.add_stage1_intercept, self.add_stage2_intercept)
-        wandb.watch(mdl)
+        if bool(os.getenv('wandb')):
+            wandb.watch(mdl)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()

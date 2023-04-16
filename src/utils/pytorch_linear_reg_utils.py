@@ -16,8 +16,8 @@ def fit_linear(target: torch.Tensor,
         weight: torch.Tensor[feature_dim, dim1, dim2, ...]
             weight of ridge linear regression. weight.size()[0] = feature_dim+1 if add_intercept is true
     """
-    assert feature.dim() == 2
-    assert target.dim() >= 2
+    assert feature.dim() == 2, f"error: expected feature dim 2, got {feature.dim()}"
+    assert target.dim() >= 2, f"error: expected feature dim 2, got {target.dim()}"
     nData, nDim = feature.size()
     A = torch.matmul(feature.t(), feature)
     device = feature.device

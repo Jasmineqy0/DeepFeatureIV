@@ -1,6 +1,5 @@
 from typing import Tuple, Optional
 
-import torch
 from torch import nn
 from torch.nn import functional as F
 from torch.nn.utils import spectral_norm
@@ -9,6 +8,7 @@ from .nn_structure_for_demand import build_net_for_demand
 from .nn_structure_for_demand_old import build_net_for_demand_old
 from .nn_structure_for_demand_image import build_net_for_demand_image
 from .nn_structure_for_dsprite import build_net_for_dsprite
+from .nn_structure_for_spaceiv import build_net_for_spaceiv
 
 import logging
 
@@ -28,5 +28,8 @@ def build_extractor(data_name: str) -> Tuple[nn.Module, nn.Module, Optional[nn.M
     elif data_name == "dsprite":
         logger.info("build dsprite model")
         return build_net_for_dsprite()
+    elif data_name == 'spaceiv':
+        logger.info("build spaceiv model")
+        return build_net_for_spaceiv()
     else:
         raise ValueError(f"data name {data_name} is not valid")

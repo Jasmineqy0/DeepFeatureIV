@@ -48,7 +48,7 @@ class DeepIVTrainer(object):
 
     def train(self, rand_seed: int = 42, verbose: int = 0) -> float:
         train_data = generate_train_data(rand_seed=rand_seed, **self.data_config)
-        test_data = generate_test_data(**self.data_config)
+        test_data = generate_test_data(rand_seed=rand_seed, **self.data_config)
         train_data_t = TrainDataSetTorch.from_numpy(train_data)
         test_data_t = TestDataSetTorch.from_numpy(test_data)
         if self.gpu_flg:
