@@ -10,4 +10,3 @@ venv
 viz/.ipynb_checkpoints
 viz/iframe_figures
 wandb
-.env
