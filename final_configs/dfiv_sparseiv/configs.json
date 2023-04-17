@@ -3,7 +3,7 @@
     "data": {
         "data_name": "sparseiv",
         "case": "case_vanilla",
-        "sparse_datadir": "/home/qyl/Desktop/projects/ma-ci/sparseIV/data",
+        "sparseiv_datadir": "/home/qyl/Desktop/projects/ma-ci/spaceIV/data",
         "data_size": [
             1600
         ],

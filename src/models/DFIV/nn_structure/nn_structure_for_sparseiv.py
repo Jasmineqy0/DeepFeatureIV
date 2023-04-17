@@ -6,9 +6,12 @@ import os
 
 
 def build_net_for_sparseiv():
-    treatment_net = nn.Sequential(nn.Linear(int(os.getenv('dcp')), 16),
+    treatment_net = nn.Sequential(nn.Linear(int(os.getenv('dts')), 128),
                                   nn.ReLU(),
-                                  nn.Linear(16, 1))
+                                  nn.Linear(128, 64),
+                                  nn.ReLU(),
+                                  nn.Linear(64, 32),
+                                  nn.Tanh())
 
     instrumental_net = nn.Sequential(nn.Linear(int(os.getenv('div')), 128),
                                      nn.ReLU(),
@@ -17,12 +20,6 @@ def build_net_for_sparseiv():
                                      nn.Linear(64, 32),
                                      nn.BatchNorm1d(32))
 
-    covariate_net = nn.Sequential(nn.Linear(int(os.getenv('doc')), 128),
-                                  nn.ReLU(),
-                                  nn.Linear(128, 32),
-                                  nn.BatchNorm1d(32),
-                                  nn.ReLU(),
-                                  nn.Linear(32, 16),
-                                  nn.ReLU())
-    
+    covariate_net = None
     return treatment_net, instrumental_net, covariate_net
+

@@ -18,10 +18,10 @@ def generate_test_sparseiv(case_dir, rand_seed) -> TestDataSet:
 
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
-    _, treatments, covariates, structurals, _ = get_vars(sample_dir, data_size)
+    _, treatments, structurals, _ = get_vars(sample_dir, data_size)
 
     return TestDataSet(treatment=treatments,
-                       covariate=covariates,
+                       covariate=None,
                        structural=structurals)
 
 def get_sample_dir(case_dir, rand_seed):
@@ -65,15 +65,16 @@ def get_parents(sample_dir):
 
 def get_vars(sample_dir, data_size):
     outcome_key = 'y_0'
-    beta_star_file = 'beta_star.npy'
+    x_prefix = 'x'
+    i_prefix = 'i'
+
+    beta_star_file = f'beta_star_{data_size}.npy'
 
     data = get_data(sample_dir, data_size)
-    parents = get_parents(sample_dir)
 
     data_columns = data.columns
-    instruments = data[[col for col in data_columns if 'i' in col.lower()]].to_numpy()
-    treatments = data[parents].to_numpy()
-    covariates = data[[col for col in data_columns if 'x' in col.lower()]]
+    instruments = data[[col for col in data_columns if i_prefix in col.lower()]].to_numpy()
+    treatments = data[[col for col in data_columns if x_prefix in col.lower()]].to_numpy()
     outcome = data[outcome_key].to_numpy()[:, np.newaxis]
 
     # config_file = os.path.join(sample_dir, 'config.yml')
@@ -86,11 +87,9 @@ def get_vars(sample_dir, data_size):
     # structurals += sum(biases)
     
     beta_star = np.load(os.path.join(sample_dir, beta_star_file))
-    structurals = covariates.to_numpy() @ beta_star
+    structurals = treatments @ beta_star
     
-    covariates = data[[col for col in data_columns if col not in parents]]
-    
-    return instruments, treatments, covariates, structurals, outcome
+    return instruments, treatments, structurals, outcome
 
 
 def generate_train_sparseiv(case_dir:  str, rand_seed: int, data_size: int, val_size: int, validation: bool) -> TrainDataSet:
@@ -111,23 +110,21 @@ def generate_train_sparseiv(case_dir:  str, rand_seed: int, data_size: int, val_
 
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
-    instruments, treatments, covariates, structurals, outcome = get_vars(sample_dir, data_size)
+    instruments, treatments, structurals, outcome = get_vars(sample_dir, data_size)
     
     if validation:
         instruments = instruments[-val_size:]
         treatments = treatments[-val_size:]
-        covariates = treatments[-val_size:]
         structurals = structurals[-val_size:]
         outcome = outcome[-val_size:]
     else:
         instruments = instruments[:-val_size]
         treatments = treatments[:-val_size]
-        covariates = treatments[:-val_size]
         structurals = structurals[:-val_size]
         outcome = outcome[:-val_size]
     
     return TrainDataSet(treatment=treatments,
                         instrumental=instruments,
-                        covariate=covariates,
+                        covariate=None,
                         structural=structurals,
                         outcome=outcome)
