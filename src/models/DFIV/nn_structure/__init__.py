@@ -8,7 +8,7 @@ from .nn_structure_for_demand import build_net_for_demand
 from .nn_structure_for_demand_old import build_net_for_demand_old
 from .nn_structure_for_demand_image import build_net_for_demand_image
 from .nn_structure_for_dsprite import build_net_for_dsprite
-from .nn_structure_for_spaceiv import build_net_for_spaceiv
+from .nn_structure_for_sparseiv import build_net_for_sparseiv
 
 import logging
 
@@ -28,8 +28,8 @@ def build_extractor(data_name: str) -> Tuple[nn.Module, nn.Module, Optional[nn.M
     elif data_name == "dsprite":
         logger.info("build dsprite model")
         return build_net_for_dsprite()
-    elif data_name == 'spaceiv':
-        logger.info("build spaceiv model")
-        return build_net_for_spaceiv()
+    elif data_name == 'sparseiv':
+        logger.info("build sparseiv model")
+        return build_net_for_sparseiv()
     else:
         raise ValueError(f"data name {data_name} is not valid")

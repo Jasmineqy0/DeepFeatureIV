@@ -82,7 +82,7 @@ class DFIVTrainer(object):
         oos_result : float
             The performance of model evaluated by oos
         """
-        train_data = generate_train_data(rand_seed=rand_seed, **self.data_config)
+        train_data = generate_train_data(validation=False, rand_seed=rand_seed, **self.data_config)
         test_data = generate_test_data(rand_seed=rand_seed, **self.data_config)
         train_1st_t, train_2nd_t = self.split_train_data(train_data)
         test_data_t = TestDataSetTorch.from_numpy(test_data)
@@ -94,9 +94,9 @@ class DFIVTrainer(object):
         if self.monitor is not None:
             new_rand_seed = np.random.randint(1e5)
             new_data_config = copy.copy(self.data_config)
-            new_rand_seed = rand_seed if new_data_config['data_name'] == 'spaceiv' else new_rand_seed
-            new_data_config["data_size"] = int(os.getenv('spaceiv_val_size'))
-            validation_data = generate_train_data(rand_seed=new_rand_seed, **self.data_config)
+            new_rand_seed = rand_seed if new_data_config['data_name'] == 'sparseiv' else new_rand_seed
+            new_data_config["data_size"] = int(os.getenv('sparseiv_val_size'))
+            validation_data = generate_train_data(validation=True, rand_seed=new_rand_seed, **self.data_config)
             validation_data_t = TrainDataSetTorch.from_numpy(validation_data)
             if self.gpu_flg:
                 validation_data_t = validation_data_t.to_gpu()
