@@ -13,10 +13,10 @@ import os
 from ..data.data_class import TrainDataSet, TestDataSet
 
 
-def generate_test_spaceiv(spaceiv_datadir, case, rand_seed) -> TestDataSet:
-    data_size = int(os.getenv('spaceiv_test_size'))
+def generate_test_sparseiv(sparseiv_datadir, case, rand_seed) -> TestDataSet:
+    data_size = int(os.getenv('sparseiv_test_size'))
 
-    case_dir = os.path.join(spaceiv_datadir, case)
+    case_dir = os.path.join(sparseiv_datadir, case)
 
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
@@ -89,7 +89,7 @@ def get_vars(sample_dir, data_size):
     return instruments, treatments, covariates, structurals, outcome
 
 
-def generate_train_spaceiv(spaceiv_datadir, case, rand_seed, data_size: int) -> TrainDataSet:
+def generate_train_sparseiv(sparseiv_datadir, case, rand_seed, data_size: int) -> TrainDataSet:
 
     """
     Parameters
@@ -102,7 +102,7 @@ def generate_train_spaceiv(spaceiv_datadir, case, rand_seed, data_size: int) -> 
     train_data : TrainDataSet
     """
 
-    case_dir = os.path.join(spaceiv_datadir, case)
+    case_dir = os.path.join(sparseiv_datadir, case)
 
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
