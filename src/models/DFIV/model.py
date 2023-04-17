@@ -90,7 +90,6 @@ class DFIVModel:
         pred = linear_reg_pred(feature, stage2_weight)
         stage2_loss = torch.norm((outcome_2nd_t - pred)) ** 2 + lam2 * torch.norm(stage2_weight) ** 2
         if bool(os.getenv('wandb')):
-
             wandb.log({"stage 2 loss": stage2_loss,
                        "stage 2 loss without weights": torch.norm((outcome_2nd_t - pred)) ** 2 })
 

@@ -122,8 +122,9 @@ class DFIVTrainer(object):
             torch.cuda.empty_cache()
 
         oos_loss: float = mdl.evaluate_t(test_data_t).data.item()
-        wandb.log({'out of sample loss': oos_loss})
-        wandb.finish()
+        if bool(os.getenv('wandb')):
+            wandb.log({'out of sample loss': oos_loss})
+            wandb.finish()
         return oos_loss
 
     def split_train_data(self, train_data: TrainDataSet):
