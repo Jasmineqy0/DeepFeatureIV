@@ -89,13 +89,16 @@ def get_vars(sample_dir, data_size):
     return instruments, treatments, covariates, structurals, outcome
 
 
-def generate_train_sparseiv(sparseiv_datadir, case, rand_seed, data_size: int) -> TrainDataSet:
+def generate_train_sparseiv(sparseiv_datadir: str, case: str, rand_seed: int, data_size: int, validation: bool) -> TrainDataSet:
 
     """
     Parameters
     ----------
-    data_size : int
-        size of data
+    sparseiv_datadir : str, Path to the directory containing the sparseiv data
+    case : str, Name of the case
+    rand_seed : int, Random seed
+    data_size : int, Size of the data
+    validation : bool, Whether to generate validation data
 
     Returns
     -------
