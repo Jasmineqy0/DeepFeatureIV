@@ -5,7 +5,7 @@ load_dotenv()
 import os
 
 
-def build_net_for_spaceiv():
+def build_net_for_sparseiv():
     treatment_net = nn.Sequential(nn.Linear(int(os.getenv('dcp')), 16),
                                   nn.ReLU(),
                                   nn.Linear(16, 1))
