@@ -13,10 +13,8 @@ import os
 from ..data.data_class import TrainDataSet, TestDataSet
 
 
-def generate_test_sparseiv(sparseiv_datadir, case, rand_seed) -> TestDataSet:
+def generate_test_sparseiv(case_dir, rand_seed) -> TestDataSet:
     data_size = int(os.getenv('sparseiv_test_size'))
-
-    case_dir = os.path.join(sparseiv_datadir, case)
 
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
@@ -67,6 +65,7 @@ def get_parents(sample_dir):
 
 def get_vars(sample_dir, data_size):
     outcome_key = 'y_0'
+    beta_star_file = 'beta_star.npy'
 
     data = get_data(sample_dir, data_size)
     parents = get_parents(sample_dir)
@@ -74,22 +73,27 @@ def get_vars(sample_dir, data_size):
     data_columns = data.columns
     instruments = data[[col for col in data_columns if 'i' in col.lower()]].to_numpy()
     treatments = data[parents].to_numpy()
-    covariates = data[[col for col in data_columns if 'x' in col.lower() and col not in parents]].to_numpy()
+    covariates = data[[col for col in data_columns if 'x' in col.lower()]]
     outcome = data[outcome_key].to_numpy()[:, np.newaxis]
 
-    config_file = os.path.join(sample_dir, 'config.yml')
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
-    y_desc = re.search(r'\(.*=(.*),.*\)', config[outcome_key]).group(1)
-    biases, vars = parse_terms(y_desc)
-    structurals = [coef * data[var].to_numpy() for var, coef in vars.items()]
-    structurals = np.stack(structurals, axis=-1)
-    structurals += sum(biases)
-
+    # config_file = os.path.join(sample_dir, 'config.yml')
+    # with open(config_file, 'r') as f:
+    #     config = yaml.safe_load(f)
+    # y_desc = re.search(r'\(.*=(.*),.*\)', config[outcome_key]).group(1)
+    # biases, vars = parse_terms(y_desc)
+    # structurals = [coef * data[var].to_numpy() for var, coef in vars.items()]
+    # structurals = np.stack(structurals, axis=-1)
+    # structurals += sum(biases)
+    
+    beta_star = np.load(os.path.join(sample_dir, beta_star_file))
+    structurals = covariates.to_numpy() @ beta_star
+    
+    covariates = data[[col for col in data_columns if col not in parents]]
+    
     return instruments, treatments, covariates, structurals, outcome
 
 
-def generate_train_sparseiv(sparseiv_datadir: str, case: str, rand_seed: int, data_size: int, validation: bool) -> TrainDataSet:
+def generate_train_sparseiv(case_dir:  str, rand_seed: int, data_size: int, val_size: int, validation: bool) -> TrainDataSet:
 
     """
     Parameters
@@ -105,11 +109,22 @@ def generate_train_sparseiv(sparseiv_datadir: str, case: str, rand_seed: int, da
     train_data : TrainDataSet
     """
 
-    case_dir = os.path.join(sparseiv_datadir, case)
-
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
     instruments, treatments, covariates, structurals, outcome = get_vars(sample_dir, data_size)
+    
+    if validation:
+        instruments = instruments[-val_size:]
+        treatments = treatments[-val_size:]
+        covariates = treatments[-val_size:]
+        structurals = structurals[-val_size:]
+        outcome = outcome[-val_size:]
+    else:
+        instruments = instruments[:-val_size]
+        treatments = treatments[:-val_size]
+        covariates = treatments[:-val_size]
+        structurals = structurals[:-val_size]
+        outcome = outcome[:-val_size]
     
     return TrainDataSet(treatment=treatments,
                         instrumental=instruments,

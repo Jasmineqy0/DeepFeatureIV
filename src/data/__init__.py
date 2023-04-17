@@ -6,9 +6,10 @@ from .demand_design import generate_test_demand_design, generate_train_demand_de
 from .dsprine import generate_train_dsprite, generate_test_dsprite
 from .sparseiv import generate_train_sparseiv, generate_test_sparseiv
 from .data_class import TrainDataSet, TestDataSet
+import os
 
 
-def generate_train_data(data_name: str, rand_seed: int, **args) -> TrainDataSet:
+def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args) -> TrainDataSet:
     if data_name == "demand":
         return generate_train_demand_design(args["data_size"], args["rho"], rand_seed, False)
     elif data_name == "demand_old":
@@ -19,7 +20,7 @@ def generate_train_data(data_name: str, rand_seed: int, **args) -> TrainDataSet:
     elif data_name == "dsprite":
         return generate_train_dsprite(args["data_size"], rand_seed)
     elif data_name == 'sparseiv':
-        return generate_train_sparseiv(args['sparseiv_datadir'], args['case'], rand_seed, args['data_size'])
+        return generate_train_sparseiv(os.path.join(args['sparseiv_datadir'], args['case']), rand_seed, args['data_size'],  args['val_size'], validation)
     else:
         raise ValueError(f"data name {data_name} is not valid")
 
@@ -35,7 +36,7 @@ def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
     elif data_name == "dsprite":
         return generate_test_dsprite()
     elif data_name == 'sparseiv':
-        return generate_test_sparseiv(args['sparseiv_datadir'], args['case'], rand_seed)
+        return generate_test_sparseiv(os.path.join(args['sparseiv_datadir'], args['case']), rand_seed)
     else:
         raise ValueError(f"data name {data_name} is not valid")
 
