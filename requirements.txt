@@ -48,3 +48,8 @@ zipp==3.1.0               # via importlib-metadata
 # additional packages
 python-dotenv
 wandb
+matplotlib
+seaborn
+kaleido
+
+# install latex with the linux command: sudo apt install texlive-fonts-recommended texlive-fonts-extra dvipng

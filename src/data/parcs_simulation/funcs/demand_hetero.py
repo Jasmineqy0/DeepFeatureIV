@@ -12,6 +12,11 @@ def outcome(data):
 def emotion(data):
     return np.random.choice(7, len(data), replace=True) + 1
 
+def rescale_p(price):
+    min_p, max_p = 1.78, 28.5
+    return (price - min_p) / (max_p - min_p)
+
 def noise_demand(data):
-    rescaled_price = (data['price'] - min(data['price'])) / (max(data['price']) - min(data['price'])) 
+    rescaled_price = rescale_p(data['price'])
+    assert  np.all(rescaled_price <= 1) and np.all(rescaled_price >= 0), 'rescaled price is not in [0, 1]'
     return np.random.normal(data['rho']*data['noise_price'], rescaled_price * data['sigma'], size=len(data))

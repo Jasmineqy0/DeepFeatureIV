@@ -1,13 +1,16 @@
 {
     "n_repeat": 3,
     "data": {
-        "data_name": "sparseiv",
-        "case": "case_num_cp_3",
-        "sparseiv_datadir": "/home/qyl/Desktop/projects/ma-ci/spaceIV/data",
+        "data_name": "spaceiv",
+        "case": "case_iv_num_4",
+        "spaceiv_datadir": "/home/qyl/Desktop/projects/ma-ci/spaceIV/data",
         "data_size": [
             1600
         ],
         "val_size": [
+            180
+        ],
+        "test_size": [
             180
         ]
     },

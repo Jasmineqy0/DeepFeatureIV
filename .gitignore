@@ -9,6 +9,7 @@ venv
 
 viz/.ipynb_checkpoints
 viz/iframe_figures
+viz/images
 wandb
 .vscode
 parcs
