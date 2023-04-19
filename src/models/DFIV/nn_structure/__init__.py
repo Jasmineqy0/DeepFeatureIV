@@ -15,7 +15,7 @@ import logging
 logger = logging.getLogger()
 
 
-def build_extractor(data_name: str) -> Tuple[nn.Module, nn.Module, Optional[nn.Module]]:
+def build_extractor(data_name: str, div: int = None, dts: int = None) -> Tuple[nn.Module, nn.Module, Optional[nn.Module]]:
     if data_name == "demand":
         logger.info("build without image")
         return build_net_for_demand()
@@ -30,6 +30,6 @@ def build_extractor(data_name: str) -> Tuple[nn.Module, nn.Module, Optional[nn.M
         return build_net_for_dsprite()
     elif data_name == 'spaceiv':
         logger.info("build spaceiv model")
-        return build_net_for_spaceiv()
+        return build_net_for_spaceiv(div, dts)
     else:
         raise ValueError(f"data name {data_name} is not valid")

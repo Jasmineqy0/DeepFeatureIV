@@ -13,8 +13,10 @@ def emotion(data):
     return np.random.choice(7, len(data), replace=True) + 1
 
 def rescale_p(price):
-    min_p, max_p = 1.78, 28.5
-    return (price - min_p) / (max_p - min_p)
+    psd = 3.7
+    pmu = 17.779
+    p_normalized = (price - pmu) / psd
+    return 1/(1 + np.exp(-p_normalized))
 
 def noise_demand(data):
     rescaled_price = rescale_p(data['price'])

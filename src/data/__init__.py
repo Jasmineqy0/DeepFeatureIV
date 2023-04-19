@@ -11,10 +11,10 @@ import os
 
 def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args) -> TrainDataSet:
     if data_name == "demand":
-        return generate_train_demand_design(args["data_size"], args["rho"], rand_seed, False)
+        return generate_train_demand_design(rand_seed=rand_seed, old_flg=False, **args)
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
-        return generate_train_demand_design(args["data_size"], args["rho"], rand_seed, True)
+        return generate_train_demand_design(rand_seed=rand_seed, old_flg=True, **args)
     elif data_name == "demand_image":
         return generate_train_demand_design_image(args["data_size"], args["rho"], rand_seed)
     elif data_name == "dsprite":

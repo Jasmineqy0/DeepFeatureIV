@@ -22,7 +22,7 @@ class SlackLoggingHandler(logging.StreamHandler):
         requests.post(self.url, json.dumps({'text': message}))
 
 
-def configure_logger(logger_name: str,
+def configure_logger(logger_name: str = 'default_logger',
                      log_format: str = LOG_FORMAT,
                      log_dir: Union[str, Path, PosixPath, None] = None,
                      webhook_url: Union[str, None] = None):
@@ -49,9 +49,10 @@ def configure_logger(logger_name: str,
         logger.addHandler(file_handler)
 
     # stdout
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.INFO)
-    stream_handler.setFormatter(log_format)
-    logger.addHandler(stream_handler)
+    if not any(isinstance(handler, logging.StreamHandler) for handler in logger.handlers):
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        stream_handler.setFormatter(log_format)
+        logger.addHandler(stream_handler)
 
-    logger.setLevel(logging.INFO)
+        logger.setLevel(logging.INFO)

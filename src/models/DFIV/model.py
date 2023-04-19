@@ -4,8 +4,6 @@ from torch import nn
 import numpy as np
 import logging
 
-from dotenv import load_dotenv
-load_dotenv()
 import wandb
 import os
 
@@ -24,7 +22,8 @@ class DFIVModel:
                  instrumental_net: nn.Module,
                  covariate_net: Optional[nn.Module],
                  add_stage1_intercept: bool,
-                 add_stage2_intercept: bool
+                 add_stage2_intercept: bool,
+                 wandb: bool = False,
                  ):
         self.treatment_net = treatment_net
         self.instrumental_net = instrumental_net
@@ -32,7 +31,8 @@ class DFIVModel:
         self.add_stage1_intercept = add_stage1_intercept
         self.add_stage2_intercept = add_stage2_intercept
 
-        if bool(os.getenv('wandb')):
+        self.wandb = wandb
+        if self.wandb:
             wandb.watch((self.instrumental_net, self.treatment_net, self.covariate_net))
 
     @staticmethod
@@ -70,6 +70,7 @@ class DFIVModel:
                  lam1: float, lam2: float,
                  add_stage1_intercept: bool,
                  add_stage2_intercept: bool,
+                 wandb: bool = False,
                  ):
 
         # stage1
@@ -89,7 +90,7 @@ class DFIVModel:
         stage2_weight = fit_linear(outcome_2nd_t, feature, lam2)
         pred = linear_reg_pred(feature, stage2_weight)
         stage2_loss = torch.norm((outcome_2nd_t - pred)) ** 2 + lam2 * torch.norm(stage2_weight) ** 2
-        if bool(os.getenv('wandb')):
+        if wandb:
             wandb.log({"stage 2 loss": stage2_loss,
                        "stage 2 loss without weights": torch.norm((outcome_2nd_t - pred)) ** 2 })
 
@@ -118,7 +119,8 @@ class DFIVModel:
                                  outcome_2nd_t,
                                  lam1, lam2,
                                  self.add_stage1_intercept,
-                                 self.add_stage2_intercept)
+                                 self.add_stage2_intercept,
+                                 self.wandb)
 
         self.stage1_weight = res["stage1_weight"]
         self.stage2_weight = res["stage2_weight"]

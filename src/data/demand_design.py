@@ -2,11 +2,8 @@ from itertools import product
 import numpy as np
 from numpy.random import default_rng
 import logging
-from typing import Tuple, TypeVar
+from typing import Tuple, TypeVar, Union
 import os
-from dotenv import load_dotenv
-import wandb
-load_dotenv()
 
 from ..data.data_class import TrainDataSet, TestDataSet
 from ..data.parcs_simulation.parcs_simulate import parcs_simulate
@@ -53,8 +50,11 @@ def generate_test_demand_design(old_flg: bool = False) -> TestDataSet:
 
 def generate_train_demand_design(data_size: int,
                                  rho: float,
+                                 parcs: bool = False,
+                                 sigma: Union[float, None] = None,
                                  rand_seed: int = 42,
-                                 old_flg: bool = False) -> TrainDataSet:
+                                 old_flg: bool = False, 
+                                 **args) -> TrainDataSet:
     """
 
     Parameters
@@ -72,17 +72,10 @@ def generate_train_demand_design(data_size: int,
     train_data : TrainDataSet
     """
 
-    exp_name = os.getenv('EXP_NAME')
-    if exp_name != 'dfiv':
-        # simulation by parcs
-        exp_name = exp_name[5:]
-
-        # get env variables
-        hetero = bool(os.getenv('HETERO'))
-        sigma = os.getenv('SIGMA')
-
+    if parcs:
         # simulate data
-        sample_data = parcs_simulate(f'src/data/parcs_simulation/configs/demand_{exp_name}.yml', data_size, rho, rand_seed, hetero, sigma)
+        sample_data = parcs_simulate(data_size, sigma, rand_seed)
+
         emotion = sample_data['emotion'].to_numpy()
         time = sample_data['time'].to_numpy()
         cost = sample_data['cost_fuel'].to_numpy() 

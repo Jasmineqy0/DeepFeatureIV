@@ -6,8 +6,7 @@ import ray
 import logging
 import torch
 import wandb
-from dotenv import load_dotenv
-load_dotenv()
+from collections import defaultdict
 
 from src.utils import grid_search_dict
 from src.models.DFIV.trainer import DFIVTrainer
@@ -15,6 +14,7 @@ from src.models.DeepIV.trainer import DeepIVTrainer
 from src.models.KernelIV.trainer import KernelIVTrainer
 from src.models.RFFKernelIV.trainer import RFFKernelIVTrainer
 from src.models.DeepGMM.trainer import DeepGMMTrainer
+from src.data.parcs_simulation.parcs_simulate import revise_parcs_config
 
 
 logger = logging.getLogger()
@@ -44,13 +44,10 @@ def run_one(alg_name: str, data_param: Dict[str, Any], train_config: Dict[str, A
     trainer = Trainer_cls(data_param, train_config, use_gpu, one_dump_dir)
 
     # set up wandb logging
-    if bool(os.getenv('wandb')):
-        config = {'hetero': bool(os.getenv('HETERO')), 'sigma': float(os.getenv('SIGMA')), 
-                  'data_size': data_param['data_size'], 'No. run': experiment_id}
-        if 'rho' in data_param:
-            data_param = data_param['rho']
-        name = os.getenv('EXP_NAME') + f' | run_{experiment_id} ' + '| ' + dump_dir_root.name
-        wandb.init(project='dfiv', name=name, config=config)
+    if 'wandb' in train_config and train_config['wandb']:
+        config = {**data_param, **{'No. run': experiment_id}}
+        name = '_'.join([alg_name, experiment_id] + list(data_param.values()))
+        wandb.init(project='alg_name', name=name, config=config)
 
     return trainer.train(experiment_id, verbose)
 
@@ -80,6 +77,13 @@ def experiments(alg_name: str,
     for dump_name, data_param in grid_search_dict(org_data_config):
         one_dump_dir = dump_dir.joinpath(dump_name)
         os.makedirs(one_dump_dir, exist_ok=True)
+
+        # revise parcs' config
+        if data_param['data_name'] == 'demand':
+            if 'parcs' in data_param and data_param['parcs']:
+                assert all(key in data_param for key in ['rho', 'sigma']), f'error: parcs simulation requires rho and sigma'
+                revise_parcs_config(data_param['rho'], data_param['sigma'])
+
         tasks = [remote_run.remote(alg_name, data_param, train_config,
                                    use_gpu, one_dump_dir, idx, verbose) for idx in range(n_repeat)]
         res = ray.get(tasks)

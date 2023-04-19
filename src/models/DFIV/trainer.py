@@ -10,8 +10,6 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import wandb
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
 from src.models.DFIV.nn_structure import build_extractor
 from src.models.DFIV.monitor import DFIVMonitor
@@ -26,7 +24,8 @@ logger = logging.getLogger()
 class DFIVTrainer(object):
 
     def __init__(self, data_configs: Dict[str, Any], train_params: Dict[str, Any],
-                 gpu_flg: bool = False, dump_folder: Optional[Path] = None):
+                 gpu_flg: bool = False, dump_folder: Optional[Path] = None, wandb: bool = False):
+        self.wandb = wandb
         self.data_config = data_configs
         self.gpu_flg = gpu_flg and torch.cuda.is_available()
         if self.gpu_flg:
@@ -116,13 +115,13 @@ class DFIVTrainer(object):
                 logger.info(f"Epoch {t} ended")
 
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
-                        self.add_stage1_intercept, self.add_stage2_intercept)
+                        self.add_stage1_intercept, self.add_stage2_intercept, self.wandb)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
 
         oos_loss: float = mdl.evaluate_t(test_data_t).data.item()
-        if bool(os.getenv('wandb')):
+        if self.wandb:
             wandb.log({'out of sample loss': oos_loss})
             wandb.finish()
         return oos_loss
