@@ -45,7 +45,7 @@ class DFIVTrainer(object):
         self.covariate_weight_decay = train_params["covariate_weight_decay"]
 
         # build networks
-        networks = build_extractor(data_configs["data_name"])
+        networks = build_extractor(**data_configs)
         self.treatment_net: nn.Module = networks[0]
         self.instrumental_net: nn.Module = networks[1]
         self.covariate_net: Optional[nn.Module] = networks[2]

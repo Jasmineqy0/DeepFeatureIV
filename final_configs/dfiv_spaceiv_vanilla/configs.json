@@ -1,28 +1,22 @@
 {
-    "n_repeat": 3,
+    "n_repeat": 1,
     "data": {
         "data_name": "spaceiv",
-        "cases": ["case_vanilla"],
+        "case": ["case_vanilla"],
         "spaceiv_datadir": "/home/stud/shen/test/DeepFeatureIV/MA/spaceIV/data",
-        "data_size": [
-            1600
-        ],
-        "val_size": [
-            180
-        ],
-        "test_size": [
-            180
-        ]
+        "data_size": 1600,
+        "val_size": 180,
+        "test_size": 50,
+        "div": 10,
+        "dts": 20
     },
     "train_params": {
-        "div": 10,
-        "dts": 20,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,
         "covariate_iter": 20,
         "stage2_iter": 1,
-        "n_epoch": 100,
+        "n_epoch": 1,
         "split_ratio": 0.5,
         "treatment_weight_decay": 0.0,
         "instrumental_weight_decay": 0.0,
