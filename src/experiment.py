@@ -61,7 +61,7 @@ def experiments(alg_name: str,
     n_repeat: int = configs["n_repeat"]
 
     if num_cpus <= 1:
-        ray.init(local_mode=True, num_gpus=num_gpu)
+        ray.init(local_mode=True, num_gpus=num_gpu, object_store_memory=15000000000)
         verbose: int = 2
     else:
         ray.init(num_cpus=num_cpus, num_gpus=num_gpu)
