@@ -81,14 +81,21 @@ def experiments(alg_name: str,
         # revise parcs' config
         if data_param['data_name'] == 'demand':
             if 'parcs' in data_param and data_param['parcs']:
-                assert all(key in data_param for key in ['rho', 'sigma']), f'error: parcs simulation requires rho and sigma'
-                revise_parcs_config(data_param['rho'], data_param['sigma'])
+                assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
+                revise_parcs_config(data_param['rho'], data_param['sigma'], data_param['parcs_config'])
 
         tasks = [remote_run.remote(alg_name, data_param, train_config,
                                    use_gpu, one_dump_dir, idx, verbose) for idx in range(n_repeat)]
         res = ray.get(tasks)
+        
+        # save treatment, covariate, prediction & oos_loss
+        res_new = defaultdict(list)
+        for item in res:
+            for key in item.keys():
+                res_new[key].append(item[key])
+        res_new = {key: np.array(res_new[key]) for key in res_new.keys()}
+        np.savez(one_dump_dir.joinpath("result.npz"), **res_new)
 
-        np.savetxt(one_dump_dir.joinpath("result.csv"), np.array(res))
         logger.critical(f"{dump_name} ended")
 
     ray.shutdown()

@@ -51,7 +51,7 @@ def generate_test_demand_design(old_flg: bool = False) -> TestDataSet:
 def generate_train_demand_design(data_size: int,
                                  rho: float,
                                  parcs: bool = False,
-                                 sigma: Union[float, None] = None,
+                                 parcs_config: str = '',
                                  rand_seed: int = 42,
                                  old_flg: bool = False, 
                                  **args) -> TrainDataSet:
@@ -74,7 +74,7 @@ def generate_train_demand_design(data_size: int,
 
     if parcs:
         # simulate data
-        sample_data = parcs_simulate(data_size, sigma, rand_seed)
+        sample_data = parcs_simulate(data_size, parcs_config, rand_seed)
 
         emotion = sample_data['emotion'].to_numpy()
         time = sample_data['time'].to_numpy()

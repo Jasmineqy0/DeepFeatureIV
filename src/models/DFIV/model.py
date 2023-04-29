@@ -152,7 +152,14 @@ class DFIVModel:
         target = test_data.structural
         with torch.no_grad():
             pred = self.predict_t(test_data.treatment, test_data.covariate)
-        return (torch.norm((target - pred)) ** 2) / target.size()[0]
+            
+        res = {'treatment': test_data.treatment.detach().cpu().numpy(), 
+               'covariate': test_data.covariate.detach().cpu().numpy(), 
+               'prediction': pred.detach().cpu().numpy(), 
+               'oos_loss': ((torch.norm((target - pred)) ** 2) / target.size()[0]).data.item() 
+               }
+        
+        return res
 
     def evaluate(self, test_data: TestDataSet):
         return self.evaluate_t(TestDataSetTorch.from_numpy(test_data)).data.item()

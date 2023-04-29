@@ -8,17 +8,16 @@ import os
 
 logger = logging.getLogger()
 
-def get_config_file(sigma: Union[None, float]):
+def get_config_file(config_name: str):
     parcs_config_dir = os.sep.join(['src', 'data', 'parcs_simulation', 'configs'])
-    original_yml = os.path.join(parcs_config_dir, 'demand_original.yml')
-    hetero_yml = os.path.join(parcs_config_dir, 'demand_hetero.yml')
+    parcs_config_path = os.path.join(parcs_config_dir, f'{config_name}.yml')
 
-    return hetero_yml if sigma else original_yml
+    return parcs_config_path
 
-def revise_parcs_config(rho: float, sigma: Union[None, float]):
+def revise_parcs_config(rho: float, sigma: Union[None, float], config_name: str):
     logger.info(f'Revising parcs config file with rho={rho} and sigma={sigma}.')
 
-    config_yml = get_config_file(sigma)
+    config_yml = get_config_file(config_name)
 
     with open(config_yml, 'r') as f:
         parcs_config = yaml.safe_load(f)
@@ -29,10 +28,11 @@ def revise_parcs_config(rho: float, sigma: Union[None, float]):
     with open(config_yml, 'w') as f:
         yaml.dump(parcs_config, f)
 
-def parcs_simulate(data_size: int, sigma: Union[float, None], rand_seed: int = 42):
+def parcs_simulate(data_size: int, parcs_config:str, rand_seed: int = 42):
 
     # obtain the graph
-    config_yml = get_config_file(sigma)
+    config_yml = get_config_file(parcs_config)
+    assert os.path.exists(config_yml), f'error: parcs config file {config_yml} does not exist.'
     nodes, edges = graph_file_parser(config_yml)
     g = Graph(nodes=nodes, edges=edges)
 

@@ -120,11 +120,11 @@ class DFIVTrainer(object):
         if self.gpu_flg:
             torch.cuda.empty_cache()
 
-        oos_loss: float = mdl.evaluate_t(test_data_t).data.item()
+        res = mdl.evaluate_t(test_data_t)
         if self.wandb:
-            wandb.log({'out of sample loss': oos_loss})
+            wandb.log({'out of sample loss': res['oos_loss']})
             wandb.finish()
-        return oos_loss
+        return res
 
     def split_train_data(self, train_data: TrainDataSet):
         n_data = train_data[0].shape[0]
