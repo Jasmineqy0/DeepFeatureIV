@@ -22,10 +22,9 @@ logger = logging.getLogger()
 
 
 class DFIVTrainer(object):
-
     def __init__(self, data_configs: Dict[str, Any], train_params: Dict[str, Any],
-                 gpu_flg: bool = False, dump_folder: Optional[Path] = None, wandb: bool = False):
-        self.wandb = wandb
+                 gpu_flg: bool = False, dump_folder: Optional[Path] = None, wandb_log: bool = False):
+        self.wandb_log = wandb_log
         self.data_config = data_configs
         self.gpu_flg = gpu_flg and torch.cuda.is_available()
         if self.gpu_flg:
@@ -117,13 +116,13 @@ class DFIVTrainer(object):
                 logger.info(f"Epoch {t} ended")
 
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
-                        self.add_stage1_intercept, self.add_stage2_intercept, self.wandb)
+                        self.add_stage1_intercept, self.add_stage2_intercept, self.wandb_log)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
 
         res = mdl.evaluate_t(test_data_t)
-        if self.wandb:
+        if self.wandb_log:
             wandb.log({'out of sample loss': res['oos_loss']})
             wandb.finish()
         return res
@@ -158,7 +157,9 @@ class DFIVTrainer(object):
             loss = linear_reg_loss(treatment_feature, feature, self.lam1)
             loss.backward()
             if verbose >= 2:
-                logger.info(f"stage1 learning: {loss.item()}")
+                logger.info(f"stage 1 learning: {loss.item()}")
+            if self.wandb_log:
+                wandb.log({'stage 1 learning': loss.item()})
             self.instrumental_opt.step()
 
     def stage2_update(self, train_1st_t, train_2nd_t, verbose):
@@ -190,7 +191,9 @@ class DFIVTrainer(object):
             loss = res["stage2_loss"]
             loss.backward()
             if verbose >= 2:
-                logger.info(f"stage2 learning: {loss.item()}")
+                logger.info(f"stage 2 learning: {loss.item()}")
+            if self.wandb_log:
+                wandb.log({'stage 2 learning': loss.item()})
             self.treatment_opt.step()
 
     def update_covariate_net(self, train_1st_data: TrainDataSetTorch, train_2nd_data: TrainDataSetTorch,
@@ -223,4 +226,6 @@ class DFIVTrainer(object):
             loss.backward()
             if verbose >= 2:
                 logger.info(f"update covariate: {loss.item()}")
+            if self.wandb_log:
+                wandb.log({'update covariate': loss.item()})
             self.covariate_opt.step()

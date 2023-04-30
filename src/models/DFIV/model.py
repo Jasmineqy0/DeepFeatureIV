@@ -23,7 +23,7 @@ class DFIVModel:
                  covariate_net: Optional[nn.Module],
                  add_stage1_intercept: bool,
                  add_stage2_intercept: bool,
-                 wandb: bool = False,
+                 wandb_log: bool = False,
                  ):
         self.treatment_net = treatment_net
         self.instrumental_net = instrumental_net
@@ -31,8 +31,8 @@ class DFIVModel:
         self.add_stage1_intercept = add_stage1_intercept
         self.add_stage2_intercept = add_stage2_intercept
 
-        self.wandb = wandb
-        if self.wandb:
+        self.wandb_log = wandb_log
+        if self.wandb_log:
             wandb.watch((self.instrumental_net, self.treatment_net, self.covariate_net))
 
     @staticmethod
@@ -70,7 +70,7 @@ class DFIVModel:
                  lam1: float, lam2: float,
                  add_stage1_intercept: bool,
                  add_stage2_intercept: bool,
-                 wandb: bool = False,
+                 wandb_log: bool = False,
                  ):
 
         # stage1
@@ -90,9 +90,6 @@ class DFIVModel:
         stage2_weight = fit_linear(outcome_2nd_t, feature, lam2)
         pred = linear_reg_pred(feature, stage2_weight)
         stage2_loss = torch.norm((outcome_2nd_t - pred)) ** 2 + lam2 * torch.norm(stage2_weight) ** 2
-        if wandb:
-            wandb.log({"stage 2 loss": stage2_loss,
-                       "stage 2 loss without weights": torch.norm((outcome_2nd_t - pred)) ** 2 })
 
         return dict(stage1_weight=stage1_weight,
                     predicted_treatment_feature=predicted_treatment_feature,
@@ -120,7 +117,7 @@ class DFIVModel:
                                  lam1, lam2,
                                  self.add_stage1_intercept,
                                  self.add_stage2_intercept,
-                                 self.wandb)
+                                 self.wandb_log)
 
         self.stage1_weight = res["stage1_weight"]
         self.stage2_weight = res["stage2_weight"]

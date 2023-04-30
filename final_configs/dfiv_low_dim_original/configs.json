@@ -17,7 +17,7 @@
         "parcs_config": "demand_original"
     },
     "train_params": {
-        "wandb": false,
+        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,

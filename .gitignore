@@ -12,6 +12,7 @@ viz/iframe_figures
 viz/images
 wandb
 .vscode
+.env
 parcs
 scripts
 tmp

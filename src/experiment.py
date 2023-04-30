@@ -7,6 +7,8 @@ import logging
 import torch
 import wandb
 from collections import defaultdict
+from dotenv import load_dotenv
+load_dotenv()
 
 from src.utils import grid_search_dict
 from src.models.DFIV.trainer import DFIVTrainer
@@ -35,19 +37,20 @@ def get_trainer(alg_name: str):
 
 
 def run_one(alg_name: str, data_param: Dict[str, Any], train_config: Dict[str, Any],
-            use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int):
+            use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int,
+            dump_dir: str):
     Trainer_cls = get_trainer(alg_name)
     one_dump_dir = None
     if dump_dir_root is not None:
         one_dump_dir = dump_dir_root.joinpath(f"{experiment_id}/")
         os.makedirs(one_dump_dir, exist_ok=True)
-    trainer = Trainer_cls(data_param, train_config, use_gpu, one_dump_dir)
+    trainer = Trainer_cls(data_param, train_config, use_gpu, one_dump_dir, train_config['wandb'])
 
     # set up wandb logging
     if 'wandb' in train_config and train_config['wandb']:
-        config = {**data_param, **{'No. run': experiment_id}}
-        name = '_'.join([alg_name, experiment_id] + list(data_param.values()))
-        wandb.init(project='alg_name', name=name, config=config)
+        wandb.login(key = os.getenv('wandb_key'))
+        config = {**data_param, **train_config}
+        wandb.init(project=f'{alg_name}', group=dump_dir, config=config)
 
     return trainer.train(experiment_id, verbose)
 
@@ -61,21 +64,12 @@ def experiments(alg_name: str,
     n_repeat: int = configs["n_repeat"]
 
     if num_cpus <= 1:
-    #     ray.init(local_mode=True, num_gpus=num_gpu, 
-    #              memory=5e10, object_store_memory=5e10, 
-    #              log_to_driver=False)
-    #     # ray.init(local_mode=True, num_gpus=num_gpu)
         verbose: int = 2
     else:
-    #     ray.init(num_cpus=num_cpus, num_gpus=num_gpu)
         verbose: int = 0
 
     use_gpu: bool = (num_gpu is not None)
 
-    # if use_gpu and torch.cuda.is_available():
-    #     remote_run = ray.remote(num_gpus=1, max_calls=1)(run_one)
-    # else:
-    #     remote_run = ray.remote(run_one)
 
     for dump_name, data_param in grid_search_dict(org_data_config):
         one_dump_dir = dump_dir.joinpath(dump_name)
@@ -88,13 +82,11 @@ def experiments(alg_name: str,
                 revise_parcs_config(data_param['rho'], data_param['sigma'], data_param['parcs_config'])
 
         tasks = [run_one(alg_name, data_param, train_config,
-                                   use_gpu, one_dump_dir, idx, verbose) for idx in range(n_repeat)]
-        # res = ray.get(tasks)
+                                   use_gpu, one_dump_dir, idx, verbose, dump_dir.name) for idx in range(n_repeat)]
         
         # save treatment, covariate, prediction & oos_loss
         res_new = defaultdict(list)
         for item in tasks:
-        # for item in res:
             for key in item.keys():
                 res_new[key].append(item[key])
         res_new = {key: np.array(res_new[key]) for key in res_new.keys()}
