@@ -6,8 +6,6 @@ from glob import glob
 import re
 import yaml
 import pandas as pd
-from dotenv import load_dotenv
-load_dotenv()
 import os
 
 from ..data.data_class import TrainDataSet, TestDataSet
