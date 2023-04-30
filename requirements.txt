@@ -28,16 +28,17 @@ protobuf==3.12.2          # via ray
 py-spy==0.3.3             # via ray
 pyrsistent==0.16.0        # via jsonschema
 pyyaml==5.3.1             # via ray
-ray==0.8.5
-redis==3.4.1              # via ray
+# ray==0.8.5
+# redis==3.4.1              # via ray
 requests==2.23.0
 scikit-learn==0.23.1
 scipy==1.4.1              # via scikit-learn
 six==1.15.0               # via grpcio, jsonschema, protobuf, pyrsistent
 soupsieve==2.0.1          # via beautifulsoup4
 threadpoolctl==2.1.0      # via scikit-learn
-torch==1.5.0
-torchvision==0.6.0
+torch==1.13.1
+torchvision==0.14.1
+pytorch-cuda==11.7
 urllib3==1.25.9           # via requests
 yarl==1.4.2               # via aiohttp
 zipp==3.1.0               # via importlib-metadata

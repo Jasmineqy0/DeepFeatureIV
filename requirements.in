@@ -1,5 +1,5 @@
-torch==1.5.0
-torchvision==0.6.0
+torch==1.13.1
+torchvision==0.14.1
 numpy==1.18.4
 ray==0.8.5
 click==7.1.2

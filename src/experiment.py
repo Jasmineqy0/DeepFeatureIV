@@ -61,18 +61,21 @@ def experiments(alg_name: str,
     n_repeat: int = configs["n_repeat"]
 
     if num_cpus <= 1:
-        ray.init(local_mode=True, num_gpus=num_gpu, object_store_memory=15000000000)
+    #     ray.init(local_mode=True, num_gpus=num_gpu, 
+    #              memory=5e10, object_store_memory=5e10, 
+    #              log_to_driver=False)
+    #     # ray.init(local_mode=True, num_gpus=num_gpu)
         verbose: int = 2
     else:
-        ray.init(num_cpus=num_cpus, num_gpus=num_gpu)
+    #     ray.init(num_cpus=num_cpus, num_gpus=num_gpu)
         verbose: int = 0
 
     use_gpu: bool = (num_gpu is not None)
 
-    if use_gpu and torch.cuda.is_available():
-        remote_run = ray.remote(num_gpus=1, max_calls=1)(run_one)
-    else:
-        remote_run = ray.remote(run_one)
+    # if use_gpu and torch.cuda.is_available():
+    #     remote_run = ray.remote(num_gpus=1, max_calls=1)(run_one)
+    # else:
+    #     remote_run = ray.remote(run_one)
 
     for dump_name, data_param in grid_search_dict(org_data_config):
         one_dump_dir = dump_dir.joinpath(dump_name)
@@ -84,13 +87,14 @@ def experiments(alg_name: str,
                 assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
                 revise_parcs_config(data_param['rho'], data_param['sigma'], data_param['parcs_config'])
 
-        tasks = [remote_run.remote(alg_name, data_param, train_config,
+        tasks = [run_one(alg_name, data_param, train_config,
                                    use_gpu, one_dump_dir, idx, verbose) for idx in range(n_repeat)]
-        res = ray.get(tasks)
+        # res = ray.get(tasks)
         
         # save treatment, covariate, prediction & oos_loss
         res_new = defaultdict(list)
-        for item in res:
+        for item in tasks:
+        # for item in res:
             for key in item.keys():
                 res_new[key].append(item[key])
         res_new = {key: np.array(res_new[key]) for key in res_new.keys()}
@@ -98,4 +102,4 @@ def experiments(alg_name: str,
 
         logger.critical(f"{dump_name} ended")
 
-    ray.shutdown()
+    # ray.shutdown()

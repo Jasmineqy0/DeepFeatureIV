@@ -50,10 +50,12 @@ class DFIVTrainer(object):
         self.instrumental_net: nn.Module = networks[1]
         self.covariate_net: Optional[nn.Module] = networks[2]
         if self.gpu_flg:
+            logger.info("network to cuda")
             self.treatment_net.to("cuda:0")
             self.instrumental_net.to("cuda:0")
             if self.covariate_net is not None:
                 self.covariate_net.to("cuda:0")
+            logger.info("network to cuda done")
         self.treatment_opt = torch.optim.Adam(self.treatment_net.parameters(),
                                               weight_decay=self.treatment_weight_decay)
         self.instrumental_opt = torch.optim.Adam(self.instrumental_net.parameters(),
@@ -146,6 +148,7 @@ class DFIVTrainer(object):
         if self.covariate_net:
             self.covariate_net.train(False)
 
+        logger.info("stage1 device: {}".format(train_1st_t.treatment.get_device()))
         treatment_feature = self.treatment_net(train_1st_t.treatment).detach()
         for i in range(self.stage1_iter):
             self.instrumental_opt.zero_grad()

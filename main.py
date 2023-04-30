@@ -19,7 +19,7 @@ DUMP_DIR = Path.cwd().joinpath('dumps')
 SRC_DIR = Path.cwd().joinpath('src')
 
 SLACK_URL = None
-NUM_GPU = None
+NUM_GPU =  1
 if Path.cwd().joinpath('src/config.json').exists():
     SLACK_URL = json.load(Path.cwd().joinpath('src/config.json').open('r'))['slack']
     NUM_GPU = json.load(Path.cwd().joinpath('src/config.json').open('r')).get('num_gpu', None)
