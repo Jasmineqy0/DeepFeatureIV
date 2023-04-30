@@ -11,16 +11,34 @@ from ..data.parcs_simulation.parcs_simulate import parcs_simulate
 np.random.seed(42)
 logger = logging.getLogger()
 
+def rescale_p(price):
+    psd = 3.7
+    pmu = 17.779
+    p_normalized = (price - pmu) / psd
+    return 1/(1 + np.exp(-p_normalized))
+
+def c(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
+    f_ = f(p, t, s).reshape(-1, 1)
+    f_ = np.hstack([f_, f_])
+    p_ = rescale_p(p).reshape(-1, 1)
+    noise = np.random.normal(np.hstack([p_, p_]), 0.5)
+    
+    return ((f_+ 1000)/1000 + noise) / 2
 
 def psi(t: np.ndarray) -> np.ndarray:
     return 2 * ((t - 5) ** 4 / 600 + np.exp(-4 * (t - 5) ** 2) + t / 10 - 2)
 
-
 def f(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
     return 100 + (10 + p) * s * psi(t) - 2 * p
 
+# def psi(t: np.ndarray) -> np.ndarray:
+#     return 2 * (((t - 3) ** 3 )/ 500 + np.exp(-6 * ((t-5) ** 2) ) - np.sqrt(t) + np.log(25 * (t ** 2) + 5) + np.sin(t)  - 7)
 
-def generate_test_demand_design(old_flg: bool = False) -> TestDataSet:
+# def f(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
+#     return 100 + 10 * s * psi(t) - (s * psi(t) - 2) * p**3
+
+
+def generate_test_demand_design(old_flg: bool = False, collider: bool = False) -> TestDataSet:
     """
     Returns
     -------
@@ -54,6 +72,8 @@ def generate_test_demand_design(old_flg: bool = False) -> TestDataSet:
         target.append(f(p, t, s))  
     
     features = np.array(data)
+    if collider:
+        features[:, 1:] += c(features[:, 0], features[:, 1], features[:, 2])
     targets: np.ndarray = np.array(target)[:, np.newaxis]
     
     if old_flg:
@@ -73,6 +93,7 @@ def generate_train_demand_design(data_size: int,
                                  parcs_config: str = '',
                                  rand_seed: int = 42,
                                  old_flg: bool = False, 
+                                 collider: bool = False,
                                  **args) -> TrainDataSet:
     """
 
@@ -123,6 +144,8 @@ def generate_train_demand_design(data_size: int,
     else:
         treatment: np.ndarray = price[:, np.newaxis]
         covariate: np.ndarray = np.c_[time, emotion]
+        if collider:
+            covariate += c(price, time, emotion)
         instrumental: np.ndarray = np.c_[cost, time, emotion]
         train_data = TrainDataSet(treatment=treatment,
                                   instrumental=instrumental,

@@ -7,6 +7,7 @@ from pathlib import Path
 import copy
 
 from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 import numpy as np
 import wandb
 import os
@@ -90,6 +91,8 @@ class DFIVTrainer(object):
             train_1st_t = train_1st_t.to_gpu()
             train_2nd_t = train_2nd_t.to_gpu()
             test_data_t = test_data_t.to_gpu()
+            
+        # mutual_info_regression(train_1st_t.instrument, train_1st_t.covariate, discrete_features=[False])
 
         if self.monitor is not None:
             new_rand_seed = np.random.randint(1e5)
@@ -106,10 +109,10 @@ class DFIVTrainer(object):
         self.lam2 *= train_2nd_t[0].size()[0]
 
         for t in range(self.n_epoch):
-            self.stage1_update(train_1st_t, verbose)
+            self.stage1_update(train_1st_t, verbose, t)
             if self.covariate_net:
-                self.update_covariate_net(train_1st_t, train_2nd_t, verbose)
-            self.stage2_update(train_1st_t, train_2nd_t, verbose)
+                self.update_covariate_net(train_1st_t, train_2nd_t, verbose, t)
+            self.stage2_update(train_1st_t, train_2nd_t, verbose, t)
             if self.monitor is not None:
                 self.monitor.record(verbose)
             if verbose >= 1:
@@ -141,7 +144,7 @@ class DFIVTrainer(object):
 
         return train_1st_data_t, train_2nd_data_t
 
-    def stage1_update(self, train_1st_t: TrainDataSetTorch, verbose: int):
+    def stage1_update(self, train_1st_t: TrainDataSetTorch, verbose: int, epoch: int):
         self.treatment_net.train(False)
         self.instrumental_net.train(True)
         if self.covariate_net:
@@ -159,10 +162,10 @@ class DFIVTrainer(object):
             if verbose >= 2:
                 logger.info(f"stage 1 learning: {loss.item()}")
             if self.wandb_log:
-                wandb.log({'stage 1 learning': loss.item()})
+                wandb.log({'stage 1 learning': loss.item(), 'epoch': epoch})
             self.instrumental_opt.step()
 
-    def stage2_update(self, train_1st_t, train_2nd_t, verbose):
+    def stage2_update(self, train_1st_t, train_2nd_t, verbose, epoch: int):
         self.treatment_net.train(True)
         self.instrumental_net.train(False)
         if self.covariate_net:
@@ -193,11 +196,11 @@ class DFIVTrainer(object):
             if verbose >= 2:
                 logger.info(f"stage 2 learning: {loss.item()}")
             if self.wandb_log:
-                wandb.log({'stage 2 learning': loss.item()})
+                wandb.log({'stage 2 learning': loss.item(), 'epoch': epoch})
             self.treatment_opt.step()
 
     def update_covariate_net(self, train_1st_data: TrainDataSetTorch, train_2nd_data: TrainDataSetTorch,
-                             verbose: int):
+                             verbose: int, epoch: int):
         # have instrumental features
         self.instrumental_net.train(False)
         instrumental_1st_feature = self.instrumental_net(train_1st_data.instrumental).detach()
@@ -227,5 +230,5 @@ class DFIVTrainer(object):
             if verbose >= 2:
                 logger.info(f"update covariate: {loss.item()}")
             if self.wandb_log:
-                wandb.log({'update covariate': loss.item()})
+                wandb.log({'update covariate': loss.item(), 'epoch': epoch})
             self.covariate_opt.step()
