@@ -22,7 +22,7 @@ def revise_parcs_config(rho: float, sigma: Union[None, float], config_name: str)
     with open(config_yml, 'r') as f:
         parcs_config = yaml.safe_load(f)
         parcs_config['rho'] = f'constant({rho})'
-        if sigma:
+        if sigma is not None:
             parcs_config['sigma'] = f'constant({sigma})'
 
     with open(config_yml, 'w') as f:

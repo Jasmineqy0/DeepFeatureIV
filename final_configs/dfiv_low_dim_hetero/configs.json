@@ -1,5 +1,5 @@
 {
-    "n_repeat": 10,
+    "n_repeat": 20,
     "data": {
         "data_name": "demand",
         "data_size": [
@@ -17,7 +17,7 @@
             "demand_hetero_1",
             "demand_hetero_2"
         ], 
-        "sigma": [0.2, 1, 1.8]
+        "sigma": [0, 0.2, 1, 1.8]
     },
     "train_params": {
         "wandb": false,
