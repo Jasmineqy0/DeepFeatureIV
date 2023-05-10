@@ -9,6 +9,7 @@ from .nn_structure_for_demand_old import build_net_for_demand_old
 from .nn_structure_for_demand_image import build_net_for_demand_image
 from .nn_structure_for_dsprite import build_net_for_dsprite
 from .nn_structure_for_spaceiv import build_net_for_spaceiv
+from .nn_structure_for_fully_random_iv import build_net_for_fully_random_iv
 
 import logging
 
@@ -32,5 +33,8 @@ def build_extractor(data_name: str, **args) -> Tuple[nn.Module, nn.Module, Optio
         assert all(key in args for key in ['div', 'dts']), 'div and dts must be specified'
         logger.info("build spaceiv model")
         return build_net_for_spaceiv(args['div'], args['dts'])
+    elif data_name == 'fully_random_iv':
+        logger.info("build fully random iv model")
+        return build_net_for_fully_random_iv(args['config_info'])
     else:
         raise ValueError(f"data name {data_name} is not valid")

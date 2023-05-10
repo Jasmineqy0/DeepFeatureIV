@@ -14,11 +14,11 @@
         ],
         "sigma": null,
         "parcs": true,
-        "parcs_config": "demand_collider",
-        "collider": true
+        "collider": false,
+        "parcs_config": ["demand_noise_price_2", "demand_noise_price_4", "demand_noise_price_8"]
     },
     "train_params": {
-        "wandb": false,
+        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,

@@ -43,6 +43,9 @@ class DFIVTrainer(object):
         self.treatment_weight_decay = train_params["treatment_weight_decay"]
         self.instrumental_weight_decay = train_params["instrumental_weight_decay"]
         self.covariate_weight_decay = train_params["covariate_weight_decay"]
+        self.treatment_lr = train_params["treatment_lr"]
+        self.instrumental_lr = train_params["instrumental_lr"]
+        self.covariate_lr = train_params["covariate_lr"]
 
         # build networks
         networks = build_extractor(**data_configs)
@@ -57,12 +60,15 @@ class DFIVTrainer(object):
                 self.covariate_net.to("cuda:0")
             logger.info("network to cuda done")
         self.treatment_opt = torch.optim.Adam(self.treatment_net.parameters(),
-                                              weight_decay=self.treatment_weight_decay)
+                                              weight_decay=self.treatment_weight_decay,
+                                              lr=self.treatment_lr)
         self.instrumental_opt = torch.optim.Adam(self.instrumental_net.parameters(),
-                                                 weight_decay=self.instrumental_weight_decay)
+                                                 weight_decay=self.instrumental_weight_decay,
+                                                 lr=self.instrumental_lr)
         if self.covariate_net:
             self.covariate_opt = torch.optim.Adam(self.covariate_net.parameters(),
-                                                  weight_decay=self.covariate_weight_decay)
+                                                  weight_decay=self.covariate_weight_decay,
+                                                  lr=self.covariate_lr)
 
         # build monitor
         self.monitor = None

@@ -1,14 +1,15 @@
 {
-    "n_repeat": 20,
+    "n_repeat": 10,
     "data": {
-        "data_name": "spaceiv",
-        "spaceiv_datadir": "../spaceIV/data",
-        "case": "case_iv_dist_uniform",
-        "data_size": 1600,
-        "val_size": 180,
-        "test_size": 180,
-        "div": 10,
-        "dts": 20
+        "data_name": "fully_random_iv",
+        "fully_random_num": 1,
+        "bootsrap_seed": 4,
+        "data_size": [
+            1000,
+            5000,
+            10000
+        ],
+        "guideline_path": "/home/stud/shen/test/MA/DeepFeatureIV/src/data/parcs_simulation/configs/fully_random_univariate/simulation.yml" 
     },
     "train_params": {
         "wandb": true,

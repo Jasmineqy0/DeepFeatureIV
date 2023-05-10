@@ -3,7 +3,7 @@
     "data": {
         "data_name": "spaceiv",
         "spaceiv_datadir": "../spaceIV/data",
-        "case": "case_iv_dist_uniform",
+        "case": ["case_hc_num:3", "case_hc_num:5", "case_hc_num:7"],
         "data_size": 1600,
         "val_size": 180,
         "test_size": 180,

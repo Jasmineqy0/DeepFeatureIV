@@ -1,0 +1,425 @@
+############################ Instrumental Variables ##############################
+iv:
+  graph:
+    node_name_prefix: 'iv'
+    num_nodes: 1
+    graph_density: [f-range, 0, 1]
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Instrumental Variables to Treatments ##############################
+iv-ts:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Observed Variables (Adjustments for X) ##############################
+ov_x:
+  graph:
+    node_name_prefix: 'ov_x'
+    num_nodes: 0
+    # either 'random' or  'none' or fixed integer
+    hidden_nodes: random
+    graph_density: [f-range, 0, 1]
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Observed Variables (Adjustments for X) to Treatments ##############################
+ov_x-ts:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Confounders to Treatments ##############################
+cf-ts:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Observed Variables (Treatments) ##############################
+ts:
+  graph:
+    node_name_prefix: 'ts'
+    num_nodes: 1
+    graph_density: [f-range, 0, 1]
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, -1, 1, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Treatments to Outcome ##############################
+ts-ot:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Observed Variables (Adjustments for Y) ##############################
+ov_y:
+  graph:
+    node_name_prefix: 'ov_y'
+    num_nodes: 0
+    # either 'random' or  'none' or fixed integer
+    hidden_nodes: random
+    graph_density: [f-range, 0, 1]
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Observed Variables (Adjustments for Y) to Outcome ##############################
+ov_y-ot:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Confounder ##############################
+cf:
+  graph:
+    node_name_prefix: 'cf'
+    num_nodes: 2
+    # either 'random' or  'none' or fixed integer
+    hidden_nodes: 1
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Confounder to Outcome ##############################
+cf-ot:
+  graph:
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+    quadratic: null
+    gaussian_rbf:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 2, 4]
+    sigmoid: 
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+      tau: [choice, 1, 3]
+    arctan:
+      alpha: [f-range, 1, 3]
+      beta: [f-range, -2, 2]
+      gamma: [choice, 0, 1]
+
+############################ Outcome ##############################
+ot:
+  graph:
+    additive_noise: True
+    additive_noise_mu: 0
+    node_name_prefix: 'ot'
+    num_nodes: 1
+    graph_density: 0
+  nodes:
+    bernoulli:
+      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    gaussian:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    lognormal:
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    poisson:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+    exponential:
+      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
+  edges:
+    identity: null
+

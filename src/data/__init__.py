@@ -6,6 +6,7 @@ from .demand_design import generate_test_demand_design, generate_train_demand_de
 from .dsprine import generate_train_dsprite, generate_test_dsprite
 from .spaceiv import generate_train_spaceiv, generate_test_spaceiv
 from .data_class import TrainDataSet, TestDataSet
+from .fully_random_iv import generate_train_fully_random_iv, generate_test_fully_random_iv
 import os
 
 
@@ -21,6 +22,8 @@ def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args
         return generate_train_dsprite(args["data_size"], rand_seed)
     elif data_name == 'spaceiv':
         return generate_train_spaceiv(rand_seed=rand_seed, validation=validation, **args)
+    elif data_name == 'fully_random_iv':
+        return generate_train_fully_random_iv(args['config_info'], args["data_size"], rand_seed=rand_seed)
     else:
         raise ValueError(f"data name {data_name} is not valid")
 
@@ -37,6 +40,8 @@ def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
         return generate_test_dsprite()
     elif data_name == 'spaceiv':
         return generate_test_spaceiv(rand_seed=rand_seed, **args)
+    elif data_name == 'fully_random_iv':
+        return generate_test_fully_random_iv(args['config_info'])
     else:
         raise ValueError(f"data name {data_name} is not valid")
 

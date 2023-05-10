@@ -6,6 +6,8 @@ from typing import Tuple, TypeVar, Union
 import os
 
 from ..data.data_class import TrainDataSet, TestDataSet
+from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
+from scipy.stats import wasserstein_distance
 from ..data.parcs_simulation.parcs_simulate import parcs_simulate
 
 np.random.seed(42)
@@ -18,12 +20,17 @@ def rescale_p(price):
     return 1/(1 + np.exp(-p_normalized))
 
 def c(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
-    f_ = f(p, t, s).reshape(-1, 1)
-    f_ = np.hstack([f_, f_])
-    p_ = rescale_p(p).reshape(-1, 1)
-    noise = np.random.normal(np.hstack([p_, p_]), 0.5)
+    # f_ = f(p, t, s).reshape(-1, 1)
+    # f_ = np.hstack([f_, f_])
+    # p_ = rescale_p(p).reshape(-1, 1)
+    # noise = np.random.normal(np.hstack([p_, p_]), 0.5)
     
-    return ((f_+ 1000)/1000 + noise) / 2
+    # return ((f_+ 1000)/1000 + noise) / 2
+    
+    f_ = f(p, t, s) / 1000
+    p_ = rescale_p(p)
+    noise = np.random.normal(p_, 0.5)
+    return (p_+f_) / 2
 
 def psi(t: np.ndarray) -> np.ndarray:
     return 2 * ((t - 5) ** 4 / 600 + np.exp(-4 * (t - 5) ** 2) + t / 10 - 2)
@@ -142,10 +149,10 @@ def generate_train_demand_design(data_size: int,
                                   outcome=outcome[:, np.newaxis],
                                   structural=structural[:, np.newaxis])
     else:
+        if collider:
+            collider = c(price, time, emotion)
         treatment: np.ndarray = price[:, np.newaxis]
         covariate: np.ndarray = np.c_[time, emotion]
-        if collider:
-            covariate += c(price, time, emotion)
         instrumental: np.ndarray = np.c_[cost, time, emotion]
         train_data = TrainDataSet(treatment=treatment,
                                   instrumental=instrumental,

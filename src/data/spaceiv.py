@@ -62,29 +62,12 @@ def get_parents(sample_dir):
     return parents
 
 def get_vars(sample_dir, data_size):
-    outcome_key = 'y_0'
-    x_prefix = 'x'
-    i_prefix = 'i'
-
-    beta_star_file = f'beta_star_{data_size}.npy'
-
-    data = get_data(sample_dir, data_size)
-
-    data_columns = data.columns
-    instruments = data[[col for col in data_columns if i_prefix in col.lower()]].to_numpy()
-    treatments = data[[col for col in data_columns if x_prefix in col.lower()]].to_numpy()
-    outcome = data[outcome_key].to_numpy()[:, np.newaxis]
-
-    # config_file = os.path.join(sample_dir, 'config.yml')
-    # with open(config_file, 'r') as f:
-    #     config = yaml.safe_load(f)
-    # y_desc = re.search(r'\(.*=(.*),.*\)', config[outcome_key]).group(1)
-    # biases, vars = parse_terms(y_desc)
-    # structurals = [coef * data[var].to_numpy() for var, coef in vars.items()]
-    # structurals = np.stack(structurals, axis=-1)
-    # structurals += sum(biases)
+    size_dir = f'data_size:{data_size}'
     
-    beta_star = np.load(os.path.join(sample_dir, beta_star_file))
+    treatments = np.loadtxt(os.path.join(sample_dir, size_dir, 'X.csv'), delimiter=',')
+    outcome = np.loadtxt(os.path.join(sample_dir, size_dir, 'Y.csv'), delimiter=',').reshape(-1, 1)
+    instruments = np.loadtxt(os.path.join(sample_dir, size_dir, 'I.csv'), delimiter=',')
+    beta_star = np.loadtxt(os.path.join(sample_dir, size_dir, 'beta_star.csv'), delimiter=',')
     structurals = treatments @ beta_star
     
     return instruments, treatments, structurals, outcome

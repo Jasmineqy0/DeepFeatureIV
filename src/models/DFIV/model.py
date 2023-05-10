@@ -33,7 +33,10 @@ class DFIVModel:
 
         self.wandb_log = wandb_log
         if self.wandb_log:
-            wandb.watch((self.instrumental_net, self.treatment_net, self.covariate_net))
+            if self.covariate_net:
+                wandb.watch((self.instrumental_net, self.treatment_net, self.covariate_net))
+            else:
+                wandb.watch((self.instrumental_net, self.treatment_net))
 
     @staticmethod
     def augment_stage1_feature(instrumental_feature: torch.Tensor,
@@ -151,8 +154,9 @@ class DFIVModel:
             pred = self.predict_t(test_data.treatment, test_data.covariate)
             
         res = {'treatment': test_data.treatment.detach().cpu().numpy(), 
-               'covariate': test_data.covariate.detach().cpu().numpy(), 
+               'covariate': test_data.covariate.detach().cpu().numpy() if test_data.covariate is not None else None, 
                'prediction': pred.detach().cpu().numpy(), 
+               'target': target.detach().cpu().numpy(),
                'oos_loss': ((torch.norm((target - pred)) ** 2) / target.size()[0]).data.item() 
                }
         

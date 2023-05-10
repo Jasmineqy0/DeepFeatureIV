@@ -2,9 +2,11 @@ from typing import Dict, Any, Optional
 from pathlib import Path
 import os
 import numpy as np
-# import ray
+from simulator.full_random_simulation import randomize_once, FINAL_CONFIG
 import logging
 import torch
+import shutil
+from glob import glob
 import wandb
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -70,19 +72,39 @@ def experiments(alg_name: str,
 
     use_gpu: bool = (num_gpu is not None)
 
+    if org_data_config['data_name'] == 'fully_random_iv':
+        config_info = []
+        for i in range(org_data_config['fully_random_num']):
+            _, final_config_path, var_info_path = randomize_once(org_data_config['guideline_path'], 1000, org_data_config['bootsrap_seed'])
+            config_dir = final_config_path.parent / str(i)
+            config_dir.mkdir(exist_ok=True, parents=True)
+            shutil.copy(final_config_path, config_dir / final_config_path.name)
+            shutil.copy(var_info_path, config_dir / var_info_path.name)
+            config_info.append({'config_path': str(config_dir / final_config_path.name), 'var_info_path': str(config_dir / var_info_path.name)})
+        org_data_config['config_info'] = config_info
 
+        guideline_path = Path(org_data_config['guideline_path'])
+        for file in (guideline_path.parent).glob('*.yml'):
+            if file.name != guideline_path.name:
+                file.unlink()
+    
     for dump_name, data_param in grid_search_dict(org_data_config):
+        if data_param['data_name'] == 'fully_random_iv':
+            config_idx = data_param['bootsrap_seed']
+            dict_idx = dump_name.index('{')
+            dump_name = dump_name[:dict_idx] + str(config_idx)
+            
         one_dump_dir = dump_dir.joinpath(dump_name)
         os.makedirs(one_dump_dir, exist_ok=True)
 
-        # revise parcs' config
+        # revise parcs' config for different rho and sigma in demand simulation
         if data_param['data_name'] == 'demand':
             if 'parcs' in data_param and data_param['parcs']:
                 assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
                 revise_parcs_config(data_param['rho'], data_param['sigma'], data_param['parcs_config'])
 
         tasks = [run_one(alg_name, data_param, train_config,
-                                   use_gpu, one_dump_dir, idx, verbose, dump_dir.name) for idx in range(n_repeat)]
+                                use_gpu, one_dump_dir, idx, verbose, dump_dir.name) for idx in range(n_repeat)]
         
         # save treatment, covariate, prediction & oos_loss
         res_new = defaultdict(list)
@@ -93,5 +115,3 @@ def experiments(alg_name: str,
         np.savez(one_dump_dir.joinpath("result.npz"), **res_new)
 
         logger.critical(f"{dump_name} ended")
-
-    # ray.shutdown()
