@@ -1,9 +1,9 @@
 {
-    "n_repeat": 5,
+    "n_repeat": 3,
     "data": {
         "data_name": "fully_random_iv",
-        "fully_random_num": 2,
-        "bootsrap_seed": 0,
+        "fully_random_num": 1,
+        "bootstrap_seed": 0,
         "data_size": [
             1000,
             5000,
@@ -12,17 +12,13 @@
         "guideline_path": "final_configs/dfiv_fully_random_multivariate_0/simulation.yml" 
     },
     "train_params": {
-        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,
         "covariate_iter": 20,
         "stage2_iter": 1,
-        "n_epoch": 150,
+        "n_epoch": 100,
         "split_ratio": 0.5,
-        "treatment_lr": 0.0001,
-        "instrumental_lr": 0.001,
-        "covariate_lr": 0.001,
         "treatment_weight_decay": 0.0,
         "instrumental_weight_decay": 0.0,
         "covariate_weight_decay": 0.1

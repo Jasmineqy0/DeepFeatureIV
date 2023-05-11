@@ -3,6 +3,7 @@ from typing import List, Optional,TYPE_CHECKING
 from pathlib import Path
 import torch
 import logging
+import wandb
 
 from src.data.data_class import TrainDataSetTorch, TestDataSetTorch
 from src.models.DFIV.model import DFIVModel
@@ -42,7 +43,7 @@ class DFIVMonitor:
         self.test_data_t = test_data_t
         self.validation_data_t = validation_data_t
 
-    def record(self, verbose: int):
+    def record(self, verbose: int, epoch: int):
         self.trainer.treatment_net.train(False)
         self.trainer.instrumental_net.train(False)
         if self.trainer.covariate_net is not None:
@@ -115,4 +116,10 @@ class DFIVMonitor:
                 logger.info(f"stage2_insample:{stage2_insample.item()}")
                 logger.info(f"stage2_outsample:{stage2_outsample.item()}")
                 logger.info(f"test_loss:{test_loss.item()}")
+
+            wandb.log({"stage 1 train loss": stage1_insample.item(), "epoch": epoch})
+            wandb.log({"stage 2 train loss": stage2_insample.item(), "epoch": epoch})
+            wandb.log({"stage 1 val loss": stage1_outsample.item(), "epoch": epoch})
+            wandb.log({"stage 2 val loss": stage2_outsample.item(), "epoch": epoch})
+            wandb.log({"test loss": test_loss.item(), "epoch": epoch})
 

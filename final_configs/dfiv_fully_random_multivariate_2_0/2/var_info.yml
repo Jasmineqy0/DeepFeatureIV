@@ -1,0 +1,23 @@
+all:
+  iv: &id001
+  - iv_0
+  - iv_1
+  ts: &id002
+  - ts_0
+  - ts_1
+  cf:
+  - cf_0
+  - cf_1
+  - cf_2
+  - cf_3
+  ot: &id003
+  - ot_0
+  noise_ot:
+  - noise_ot
+observed:
+  cf:
+  - cf_2
+  - cf_3
+  iv: *id001
+  ts: *id002
+  ot: *id003

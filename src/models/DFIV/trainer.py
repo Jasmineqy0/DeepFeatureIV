@@ -7,10 +7,9 @@ from pathlib import Path
 import copy
 
 from sklearn.model_selection import train_test_split
-from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
+from torch.optim.lr_scheduler import ExponentialLR
 import numpy as np
 import wandb
-import os
 
 from src.models.DFIV.nn_structure import build_extractor
 from src.models.DFIV.monitor import DFIVMonitor
@@ -24,28 +23,30 @@ logger = logging.getLogger()
 
 class DFIVTrainer(object):
     def __init__(self, data_configs: Dict[str, Any], train_params: Dict[str, Any],
-                 gpu_flg: bool = False, dump_folder: Optional[Path] = None, wandb_log: bool = False):
-        self.wandb_log = wandb_log
+                 gpu_flg: bool = False, dump_folder: Optional[Path] = None):
+        
+        self.wandb_log = True
         self.data_config = data_configs
         self.gpu_flg = gpu_flg and torch.cuda.is_available()
         if self.gpu_flg:
             logger.info("gpu mode")
         # configure training params
-        self.lam1: float = train_params["lam1"]
-        self.lam2: float = train_params["lam2"]
-        self.stage1_iter: int = train_params["stage1_iter"]
-        self.stage2_iter: int = train_params["stage2_iter"]
-        self.covariate_iter: int = train_params["covariate_iter"]
-        self.n_epoch: int = train_params["n_epoch"]
-        self.split_ratio: float = train_params["split_ratio"]
+        self.lam1: float =  train_params['lam1']
+        self.lam2: float = train_params['lam2']
+        self.stage1_iter: int = train_params['stage1_iter']
+        self.stage2_iter: int = train_params['stage2_iter']
+        self.covariate_iter: int = train_params['covariate_iter']
+        self.n_epoch: int = train_params['n_epoch']
+        self.split_ratio: float = train_params['split_ratio']
         self.add_stage1_intercept = True
         self.add_stage2_intercept = True
-        self.treatment_weight_decay = train_params["treatment_weight_decay"]
-        self.instrumental_weight_decay = train_params["instrumental_weight_decay"]
-        self.covariate_weight_decay = train_params["covariate_weight_decay"]
-        self.treatment_lr = train_params["treatment_lr"]
-        self.instrumental_lr = train_params["instrumental_lr"]
-        self.covariate_lr = train_params["covariate_lr"]
+        self.treatment_weight_decay = train_params['treatment_weight_decay']
+        self.instrumental_weight_decay = train_params['instrumental_weight_decay']
+        self.covariate_weight_decay = train_params['covariate_weight_decay']
+        self.treatment_lr = train_params['treatment_lr']
+        self.instrumental_lr = train_params['instrumental_lr']
+        self.covariate_lr = train_params['covariate_lr']
+        self.lr_scheduler = train_params['lr_scheduler']
 
         # build networks
         networks = build_extractor(**data_configs)
@@ -69,6 +70,11 @@ class DFIVTrainer(object):
             self.covariate_opt = torch.optim.Adam(self.covariate_net.parameters(),
                                                   weight_decay=self.covariate_weight_decay,
                                                   lr=self.covariate_lr)
+        if self.lr_scheduler:
+            self.treatment_lr_scheduler = ExponentialLR(self.treatment_opt, gamma=0.8)
+            self.instrumental_lr_scheduler = ExponentialLR(self.instrumental_opt, gamma=0.8)
+            if self.covariate_net:
+                self.covariate_lr_scheduler = ExponentialLR(self.covariate_opt, gamma=0.95)
 
         # build monitor
         self.monitor = None
@@ -120,7 +126,7 @@ class DFIVTrainer(object):
                 self.update_covariate_net(train_1st_t, train_2nd_t, verbose, t)
             self.stage2_update(train_1st_t, train_2nd_t, verbose, t)
             if self.monitor is not None:
-                self.monitor.record(verbose)
+                self.monitor.record(verbose, t)
             if verbose >= 1:
                 logger.info(f"Epoch {t} ended")
 
@@ -131,9 +137,9 @@ class DFIVTrainer(object):
             torch.cuda.empty_cache()
 
         res = mdl.evaluate_t(test_data_t)
-        if self.wandb_log:
-            wandb.log({'out of sample loss': res['oos_loss']})
-            wandb.finish()
+
+        wandb.finish()
+
         return res
 
     def split_train_data(self, train_data: TrainDataSet):
@@ -167,9 +173,11 @@ class DFIVTrainer(object):
             loss.backward()
             if verbose >= 2:
                 logger.info(f"stage 1 learning: {loss.item()}")
-            if self.wandb_log:
-                wandb.log({'stage 1 learning': loss.item(), 'epoch': epoch})
             self.instrumental_opt.step()
+        if self.lr_scheduler:
+            logging.info(f'instrumental net learning rate before: {self.instrumental_opt.param_groups[0]["lr"]}')
+            self.instrumental_lr_scheduler.step()
+            logging.info(f'instrumental net learning rate after: {self.instrumental_opt.param_groups[0]["lr"]}')
 
     def stage2_update(self, train_1st_t, train_2nd_t, verbose, epoch: int):
         self.treatment_net.train(True)
@@ -201,9 +209,9 @@ class DFIVTrainer(object):
             loss.backward()
             if verbose >= 2:
                 logger.info(f"stage 2 learning: {loss.item()}")
-            if self.wandb_log:
-                wandb.log({'stage 2 learning': loss.item(), 'epoch': epoch})
             self.treatment_opt.step()
+        if self.lr_scheduler:
+            self.treatment_lr_scheduler.step()
 
     def update_covariate_net(self, train_1st_data: TrainDataSetTorch, train_2nd_data: TrainDataSetTorch,
                              verbose: int, epoch: int):
@@ -235,6 +243,7 @@ class DFIVTrainer(object):
             loss.backward()
             if verbose >= 2:
                 logger.info(f"update covariate: {loss.item()}")
-            if self.wandb_log:
-                wandb.log({'update covariate': loss.item(), 'epoch': epoch})
+            wandb.log({'stage 2 train covariate loss': loss.item(), 'epoch': epoch})
             self.covariate_opt.step()
+        if self.lr_scheduler:
+            self.covariate_lr_scheduler.step()

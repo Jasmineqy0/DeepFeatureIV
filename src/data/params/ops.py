@@ -1,0 +1,57 @@
+from pathlib import Path
+import shutil
+from typing import Any, Dict
+from simulator.full_random_simulation import randomize_once
+from src.data.parcs_simulation.parcs_simulate import constant_rho_sigma
+import re
+
+def generate_data_config_info(guideline_path, fully_random_num, bootsrap_seed):
+    config_file, var_info_file = 'config.yml', 'var_info.yml'
+    guideline_path = Path(guideline_path)
+    dfiv_config_dir = guideline_path.parent
+        
+    data_config_info = []
+        
+    for i in range(fully_random_num):
+        data_config_dir = dfiv_config_dir / str(i)
+        data_config_path = data_config_dir / config_file
+        data_var_info_path = data_config_dir / var_info_file
+
+        if not data_config_path.exists() or not data_var_info_path.exists():
+            _, tmp_config_path, tmp_var_info_path = randomize_once(guideline_path, 1000, bootsrap_seed)
+            data_config_dir.mkdir(exist_ok=True, parents=True)
+            shutil.copy(tmp_config_path, data_config_path)
+            shutil.copy(tmp_var_info_path, data_var_info_path)
+
+        data_config_info.append({'config_path': data_config_path, 
+                                 'var_info_path': data_var_info_path})
+        
+    for file in dfiv_config_dir.glob('*.yml'):
+            if file.name != guideline_path.name:
+                file.unlink()
+
+    return data_config_info
+
+
+def add_data_param(data_config: Dict[str, Any]):
+        if data_config['data_name'] == 'fully_random_iv':
+            data_config['config_info'] = generate_data_config_info(data_config['guideline_path'], 
+                                                                   data_config['fully_random_num'],
+                                                                   data_config['bootstrap_seed'])
+
+def revise_dump_name(data_param, dump_name):
+    if data_param['data_name'] == 'fully_random_iv':
+        seed_str = f"seed:{data_param['bootstrap_seed']}"
+        guideline_str = f"guideline:{Path(data_param['guideline_path']).stem}"
+        match = re.search(r'config_info:{.*}', dump_name)
+        start_idx, end_idx = match.start(), match.end()
+        dump_name = dump_name[:start_idx] + seed_str + '-'+ guideline_str + dump_name[end_idx:]
+
+    return dump_name
+
+def revise_parcs_config(data_param):
+     # revise parcs' config for different rho and sigma in demand simulation
+    if data_param['data_name'] == 'demand':
+        if 'parcs' in data_param and data_param['parcs']:
+            assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
+            constant_rho_sigma(data_param['rho'], data_param['sigma'], data_param['parcs_config'])

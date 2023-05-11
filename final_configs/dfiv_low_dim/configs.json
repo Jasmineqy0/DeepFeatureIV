@@ -14,7 +14,6 @@
         ]
     },
     "train_params": {
-        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,
@@ -22,6 +21,10 @@
         "stage2_iter": 1,
         "n_epoch": 100,
         "split_ratio": 0.5,
+        "treatment_lr": 1e-3,
+        "instrumental_lr": 1e-3,
+        "covariate_lr": 1e-3,
+        "lr_scheduler": false,
         "treatment_weight_decay": 0.0,
         "instrumental_weight_decay": 0.0,
         "covariate_weight_decay": 0.1

@@ -14,7 +14,7 @@ def get_config_file(config_name: str):
 
     return parcs_config_path
 
-def revise_parcs_config(rho: float, sigma: Union[None, float], config_name: str):
+def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
     logger.info(f'Revising parcs config file with rho={rho} and sigma={sigma}.')
 
     config_yml = get_config_file(config_name)

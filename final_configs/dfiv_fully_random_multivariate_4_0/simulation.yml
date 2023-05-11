@@ -2,7 +2,7 @@
 iv:
   graph:
     node_name_prefix: 'iv'
-    num_nodes: [i-range, 5, 10]
+    num_nodes: 3
     graph_density: [f-range, 0, 1]
   nodes:
     bernoulli:
@@ -183,7 +183,7 @@ cf-ts:
 ts:
   graph:
     node_name_prefix: 'ts'
-    num_nodes: [i-range, 5, 10]
+    num_nodes: 3
     graph_density: [f-range, 0, 1]
   nodes:
     bernoulli:
@@ -329,9 +329,9 @@ ov_y-ot:
 cf:
   graph:
     node_name_prefix: 'cf'
-    num_nodes: [i-range, 5, 10]
+    num_nodes: 6
     # either 'random' or  'none' or fixed integer
-    hidden_nodes: random
+    hidden_nodes: 3
     graph_density: 0
   nodes:
     bernoulli:

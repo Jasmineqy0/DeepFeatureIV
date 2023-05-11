@@ -49,6 +49,7 @@ def generate_test_fully_random_iv(config_info):
     # bootstrap treatments
     bootstrap_size = 1000
     bootstrap_samples = g.sample(size=bootstrap_size)
+    assert not np.any(np.isnan(bootstrap_samples.to_numpy())), 'NaN values are not allowed in bootstrap samples' 
     treatment_cols = sorted([col for col in bootstrap_samples.columns if col.startswith('ts')])
     structural_cols = sorted([col for col in bootstrap_samples.columns if col.startswith('ot')])
     # randomize interventions from sampled treatments

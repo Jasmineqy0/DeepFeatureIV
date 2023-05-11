@@ -30,7 +30,7 @@ def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args
 
 def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
     if data_name == "demand":
-        return generate_test_demand_design(False, args['collider'])
+        return generate_test_demand_design(False)
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
         return generate_test_demand_design(True)

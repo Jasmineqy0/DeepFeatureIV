@@ -1,24 +1,18 @@
 {
-    "n_repeat": 5,
+    "n_repeat": 3,
     "data": {
-        "data_name": "demand",
+        "data_name": "fully_random_iv",
+        "fully_random_num": 1,
+        "bootstrap_seed": 0,
         "data_size": [
             1000,
             5000,
             10000
         ],
-        "rho": [
-            0.1, 
-            0.5,
-            0.9
-        ],
-        "sigma": null,
-        "parcs": true,
-        "parcs_config": "demand_collider",
-        "collider": true
+        "guideline_path": "final_configs/dfiv_fully_random_multivariate_4/simulation.yml" 
     },
     "train_params": {
-        "wandb": false,
+        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,

@@ -1,18 +1,13 @@
 {
-    "n_repeat": 10,
+    "n_repeat": 1,
     "data": {
         "data_name": "fully_random_iv",
         "fully_random_num": 1,
-        "bootsrap_seed": 4,
-        "data_size": [
-            1000,
-            5000,
-            10000
-        ],
-        "guideline_path": "/home/stud/shen/test/MA/DeepFeatureIV/src/data/parcs_simulation/configs/fully_random_univariate/simulation.yml" 
+        "bootstrap_seed": 4,
+        "data_size": 10000,
+        "guideline_path": "final_configs/dfiv_fully_random_univariate_4/simulation.yml" 
     },
     "train_params": {
-        "wandb": true,
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,

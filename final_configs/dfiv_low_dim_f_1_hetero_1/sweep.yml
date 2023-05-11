@@ -1,0 +1,70 @@
+program: main.py
+command:
+- python
+- ${program}
+- "final_configs/dfiv_fully_random_multivariate_0/configs.json"
+- "dfiv"
+method: bayes
+metric:
+  goal: minimize
+  name: out of sample loss
+early_terminate:
+  type: hyperband
+  min_iter: 4
+parameters:
+  covariate_iter:
+    distribution: int_uniform
+    max: 30
+    min: 15
+  covariate_weight_decay:
+    distribution: uniform
+    max: 0.2
+    min: 0.05
+  lam1:
+    distribution: uniform
+    max: 0.2
+    min: 0.05
+  lam2:
+    distribution: uniform
+    max: 0.2
+    min: 0.05
+  n_epoch:
+    distribution: int_uniform
+    max: 10
+    min: 5
+  split_ratio:
+    distribution: uniform
+    max: 0.6
+    min: 0.4
+  stage1_iter:
+    distribution: int_uniform
+    max: 30
+    min: 15
+  stage2_iter:
+    distribution: int_uniform
+    max: 30
+    min: 15
+  treatment_lr:
+    distribution: uniform
+    max: 0.001
+    min: 0.00001
+  treatment_weight_decay:
+    distribution: uniform
+    max: 0.1
+    min: 0.0
+  instrumental_lr:
+    distribution: uniform
+    max: 0.01
+    min: 0.0001
+  instrumental_weight_decay:
+    distribution: uniform
+    max: 0.1
+    min: 0.0
+  covariate_lr:
+    distribution: uniform
+    max: 0.01
+    min: 0.0001
+  covariate_weight_decay:
+    distribution: uniform
+    max: 0.1
+    min: 0.0
