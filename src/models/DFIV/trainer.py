@@ -143,8 +143,14 @@ class DFIVTrainer(object):
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
+            
         # evaluate
         res = mdl.evaluate_t(test_data_t)
+        # save treatment, covariate, prediction, target(structural) & oos_loss
+        res_dict = {key: res[key] for key in res.keys()}
+        res_path = Path(self.dump_folder) / 'result.npz'
+        np.savez(res_path, **res_dict)
+        wandb.save(str(res_path), policy='now')    
         
         # save model
         model_path = Path(self.dump_folder) / 'model.pth'
@@ -152,7 +158,7 @@ class DFIVTrainer(object):
             'treatment_net': self.treatment_net.state_dict(),
             'covariate_net': self.covariate_net.state_dict() if self.covariate_net else None,
         }, model_path)
-        wandb.save(str(model_path), policy='end')
+        wandb.save(str(model_path), policy='now')
         
         # wandb finishes
         wandb.finish()

@@ -154,10 +154,10 @@ class DFIVModel:
             pred = self.predict_t(test_data.treatment, test_data.covariate)
             
         res = {'treatment': test_data.treatment.detach().cpu().numpy(), 
-               'covariate': test_data.covariate.detach().cpu().numpy() if test_data.covariate is not None else None, 
+               'covariate': test_data.covariate.detach().cpu().numpy() if test_data.covariate is not None else np.array([]), 
                'prediction': pred.detach().cpu().numpy(), 
                'target': target.detach().cpu().numpy(),
-               'oos_loss': ((torch.norm((target - pred)) ** 2) / target.size()[0]).data.item() 
+               'oos_loss': np.array(((torch.norm((target - pred)) ** 2) / target.size()[0]).data.item())
                }
         
         return res

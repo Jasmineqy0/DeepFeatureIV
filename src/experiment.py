@@ -92,12 +92,12 @@ def experiments(alg_name: str,
         tasks = [run_one(alg_name, exp_data_configs, train_configs,
                                 use_gpu, one_dump_dir, idx, verbose, dump_dir.name, model_configs) for idx in range(n_repeat)]
         
-        # save treatment, covariate, prediction, target(structural) & oos_loss
-        res_new = defaultdict(list)
-        for item in tasks:
-            for key in item.keys():
-                res_new[key].append(item[key])
-        res_new = {key: np.array(res_new[key]) for key in res_new.keys()}
-        np.savez(one_dump_dir.joinpath("result.npz"), **res_new)
+        # # save treatment, covariate, prediction, target(structural) & oos_loss
+        # res_new = defaultdict(list)
+        # for item in tasks:
+        #     for key in item.keys():
+        #         res_new[key].append(item[key])
+        # res_new = {key: np.array(res_new[key]) for key in res_new.keys()}
+        # np.savez(one_dump_dir.joinpath("result.npz"), **res_new)
 
         logger.critical(f"{dump_name} ended")
