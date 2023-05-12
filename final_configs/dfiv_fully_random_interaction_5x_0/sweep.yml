@@ -27,40 +27,65 @@ parameters:
   model_configs:
     parameters:
       batch_normalization:
-        distribution: categorical
-        values:
-          - True
-          - False
-      layer:
+        value: true
+      instrumental_hidden_layer:
         distribution: int_uniform
         min: 1
-        max: 4
-      hidden_dim:
+        max: 10
+      treatment_hidden_layer:
+        distribution: int_uniform
+        min: 1
+        max: 10
+      covariate_hidden_layer:
+        distribution: int_uniform
+        min: 1
+        max: 10
+      instrumental_hidden_dim:
         distribution: int_uniform
         min: 10
-        max: 50
+        max: 128
+      treatment_hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 128
+      covariate_hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 128
+      instrumental_output_dim: 
+        distribution: int_uniform
+        min: 1
+        max: 16
+      treatment_output_dim: 
+        distribution: int_uniform
+        min: 1
+        max: 16
+      covariate_output_dim: 
+        distribution: int_uniform
+        min: 1
+        max: 16
   train_configs:
     parameters:
       lam1:
         distribution: uniform
-        min: 0.05
-        max: 0.15
+        min: 0.08
+        max: 0.2
       lam2:
         distribution: uniform
-        min: 0.05
-        max: 0.15
+        min: 0.08
+        max: 0.2
       stage1_iter:
         distribution: int_uniform
         min: 0
-        max: 10
+        max: 20
       covariate_iter:
         distribution: int_uniform
         min: 0
-        max: 10
+        max: 20
       stage2_iter:
         distribution: int_uniform
         min: 0
-        max: 10
+        max: 20
       n_epoch:
         distribution: int_uniform
         min: 90
@@ -101,12 +126,12 @@ parameters:
       treatment_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.000001
+        max: 0.0000001
       instrumental_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.000001
+        max: 0.0000001
       covariate_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.000001
+        max: 0.0000001
