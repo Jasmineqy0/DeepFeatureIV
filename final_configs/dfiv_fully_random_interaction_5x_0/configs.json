@@ -9,8 +9,15 @@
     },
     "model_configs":{
         "batch_normalization": false,
-        "layer": 1,
-        "hidden_dim": 10
+        "treatment_hidden_layer": 3,
+        "treatment_hidden_dim": 25,
+        "treatment_output_dim": 25,
+        "instrumental_hidden_layer": 3,
+        "instrumental_hidden_dim": 25,
+        "instrumental_output_dim": 25,
+        "covariate_hidden_layer": 3,
+        "covariate_hidden_dim": 25,
+        "covariate_output_dim": 25
     },
     "train_configs": {
         "lam1": 0.1,

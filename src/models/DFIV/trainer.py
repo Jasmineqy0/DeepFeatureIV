@@ -157,6 +157,7 @@ class DFIVTrainer(object):
         torch.save({
             'treatment_net': self.treatment_net.state_dict(),
             'covariate_net': self.covariate_net.state_dict() if self.covariate_net else None,
+            'stage_2_weight': mdl.stage2_weight
         }, model_path)
         wandb.save(str(model_path), policy='now')
         

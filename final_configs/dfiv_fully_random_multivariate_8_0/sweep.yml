@@ -27,15 +27,44 @@ parameters:
   model_configs:
     parameters:
       batch_normalization:
-        distribution: categorical
-        values:
-          - True
-          - False
+        value: false
       layer:
         distribution: int_uniform
         min: 1
         max: 4
-      hidden_dim:
+      instrumental_hidden_layer:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      treatment_hidden_layer:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      covariate_hidden_layer:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      instrumental_hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      treatment_hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      covariate_hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 50
+      instrumental_output_dim: 
+        distribution: int_uniform
+        min: 10
+        max: 50
+      treatment_output_dim: 
+        distribution: int_uniform
+        min: 10
+        max: 50
+      covariate_output_dim: 
         distribution: int_uniform
         min: 10
         max: 50
@@ -70,10 +99,7 @@ parameters:
         min: 0.4
         max: 0.6
       lr_scheduler: 
-        distribution: categorical
-        values:
-          - True
-          - False
+        value: true
       treatment_lr_gamma:
         distribution: uniform
         min: 0.9

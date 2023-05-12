@@ -5,7 +5,6 @@ import numpy as np
 import logging
 
 import wandb
-import os
 
 from src.utils.pytorch_linear_reg_utils import fit_linear, linear_reg_pred, outer_prod, add_const_col
 from src.data.data_class import TrainDataSet, TestDataSet, TrainDataSetTorch, TestDataSetTorch
