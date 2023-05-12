@@ -35,6 +35,6 @@ def build_extractor(data_name: str, **args) -> Tuple[nn.Module, nn.Module, Optio
         return build_net_for_spaceiv(args['div'], args['dts'])
     elif data_name == 'fully_random_iv':
         logger.info("build fully random iv model")
-        return build_net_for_fully_random_iv(args['config_info'])
+        return build_net_for_fully_random_iv(args['simulation_info'], args['model_configs'])
     else:
         raise ValueError(f"data name {data_name} is not valid")

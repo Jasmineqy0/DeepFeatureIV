@@ -34,24 +34,25 @@ def get_trainer(alg_name: str):
         raise ValueError(f"invalid algorithm name {alg_name}")
 
 
-def run_one(alg_name: str, data_param: Dict[str, Any], train_config: Dict[str, Any],
-            use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int,
-            group_name: str):
-    # if len(dict(wandb.config)) == 0:
-
-    wandb.init(project="DeepFeatureIV", group=group_name,
-                config={**data_param, **train_config, 'experiment_id': experiment_id})
+def run_one(alg_name: str, data_configs: Dict[str, Any], train_configs: Dict[str, Any],
+            use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int, 
+            group: str, model_configs: Dict[str, Any]=None):
+    # # initialize wandb
+    # wandb.init(project="DeepFeatureIV", group=group,
+    #             config={'data_configs': data_configs, 'train_configs': train_configs, 'model_configs': model_configs, 'experiment_id': experiment_id})
     
-    # else:
-        # wandb.init(group='sweep')
-        # wandb.config.update({**data_param,  'experiment_id': experiment_id})
+    wandb.init(group='sweep3')
+    wandb.config.data_configs['simulation_info'] = data_configs['simulation_info']
     
+    # get the model class
     Trainer_cls = get_trainer(alg_name)
+    # set up the dump directory per experiment
     one_dump_dir = None
     if dump_dir_root is not None:
         one_dump_dir = dump_dir_root.joinpath(f"{experiment_id}/")
         os.makedirs(one_dump_dir, exist_ok=True)
-    trainer = Trainer_cls(data_param, wandb.config, use_gpu, one_dump_dir)
+    # initialize the trainer
+    trainer = Trainer_cls(wandb.config.data_configs, wandb.config.train_configs, use_gpu, one_dump_dir, wandb.config.model_configs)
 
     return trainer.train(experiment_id, verbose)
 
@@ -59,8 +60,9 @@ def experiments(alg_name: str,
                 configs: Dict[str, Any],
                 dump_dir: Path,
                 num_cpus: int, num_gpu: Optional[int]):
-    train_config = configs["train_params"]
-    org_data_config = configs["data"]
+    train_configs: Dict[str, Any] = configs["train_configs"]
+    model_configs: Dict[str, Any] = configs["model_configs"] if "model_configs" in configs else None
+    org_data_configs: Dict[str, Any] = configs["data_configs"]
     n_repeat: int = configs["n_repeat"]
 
     if num_cpus <= 1:
@@ -73,22 +75,24 @@ def experiments(alg_name: str,
 
     # wandb login
     wandb.login(key = os.getenv('wandb_key')) 
+    
     # add data params for fully randomized iv data
-    add_data_param(org_data_config)
+    add_data_param(org_data_configs)
 
-    for dump_name, data_param in grid_search_dict(org_data_config):
+    for dump_name, exp_data_configs in grid_search_dict(org_data_configs):
         # revise dump_name for fully randomized iv data
-        dump_name = revise_dump_name(data_param, dump_name)
+        dump_name = revise_dump_name(exp_data_configs, dump_name)
         one_dump_dir = dump_dir.joinpath(dump_name)
         os.makedirs(one_dump_dir, exist_ok=True)
 
         # revise data_param for some parcs config
-        revise_parcs_config(data_param)
+        revise_parcs_config(exp_data_configs)
 
-        tasks = [run_one(alg_name, data_param, train_config,
-                                use_gpu, one_dump_dir, idx, verbose, dump_dir.name) for idx in range(n_repeat)]
+        # run one configuration n_repeat times
+        tasks = [run_one(alg_name, exp_data_configs, train_configs,
+                                use_gpu, one_dump_dir, idx, verbose, dump_dir.name, model_configs) for idx in range(n_repeat)]
         
-        # save treatment, covariate, prediction & oos_loss
+        # save treatment, covariate, prediction, target(structural) & oos_loss
         res_new = defaultdict(list)
         for item in tasks:
             for key in item.keys():

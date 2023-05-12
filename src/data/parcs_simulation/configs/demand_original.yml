@@ -11,7 +11,7 @@ outcome: deterministic(src/data/parcs_simulation/funcs/demand_original.py, outco
 price: deterministic(src/data/parcs_simulation/funcs/demand_original.py, price)
 price->emotion: identity()
 price->outcome: identity()
-rho: constant(0.5)
+rho: constant(0.1)
 rho->noise_demand: identity()
 time: uniform(mu_=5, diff_=10)
 time->outcome: identity()

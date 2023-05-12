@@ -8,6 +8,7 @@ from shutil import copyfile, make_archive
 import os
 from os import PathLike
 import datetime
+import yaml
 
 
 from src.utils.custom_logging import configure_logger
@@ -47,8 +48,11 @@ def main(ctx, config_path, debug):
     # set up the folder to dump the log
     configure_logger(log_dir=Path.cwd().joinpath(f'logs/{exp_name}'))
 
+    # set up the result folder
     dump_dir = DUMP_DIR.joinpath(exp_name)
     os.makedirs(dump_dir, exist_ok=True)
+    
+    # load the configuration file, dump it and archive the source code
     with open(config_path) as f:
         config = json.load(f)
     ctx.obj["data_dir"] = dump_dir

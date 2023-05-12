@@ -1,25 +1,34 @@
 {
-    "n_repeat": 2,
-    "data": {
+    "n_repeat": 1,
+    "data_configs": {
         "data_name": "fully_random_iv",
-        "fully_random_num": 5,
+        "fully_random_num": 1,
         "bootstrap_seed": 0,
-        "data_size": 20000,
+        "data_size": 5000,
         "guideline_path": "final_configs/dfiv_fully_random_multivariate_2_0/simulation.yml" 
     },
-    "train_params": {
+    "model_configs":{
+        "batch_normalization": false,
+        "layer": 1,
+        "hidden_dim": 10
+    },
+    "train_configs": {
         "lam1": 0.1,
         "lam2": 0.1,
-        "stage1_iter": 20,
-        "covariate_iter": 20,
+        "stage1_iter": 1,
+        "covariate_iter": 1,
         "stage2_iter": 1,
-        "n_epoch": 150,
+        "n_epoch": 500,
         "split_ratio": 0.5,
-        "treatment_lr": 1e-4,
-        "instrumental_lr": 1e-3,
+        "lr_scheduler": false,
+        "treatment_lr_gamma": 1,
+        "instrumental_lr_gamma": 1,
+        "covariate_lr_gamma": 1,
+        "treatment_lr": 1e-5,
+        "instrumental_lr": 1e-5,
         "covariate_lr": 1e-3,
-        "treatment_weight_decay": 0.2,
-        "instrumental_weight_decay": 0.2,
-        "covariate_weight_decay": 0.2
+        "treatment_weight_decay": 0,
+        "instrumental_weight_decay": 0,
+        "covariate_weight_decay": 0
     }
 }

@@ -22,8 +22,8 @@ logger = logging.getLogger()
 
 
 class DFIVTrainer(object):
-    def __init__(self, data_configs: Dict[str, Any], train_params: Dict[str, Any],
-                 gpu_flg: bool = False, dump_folder: Optional[Path] = None):
+    def __init__(self, data_configs: Dict[str, Any], train_configs: Dict[str, Any],
+                 gpu_flg: bool = False, dump_folder: Optional[Path] = None, model_configs: Dict[str, Any] = None):
         
         self.wandb_log = True
         self.data_config = data_configs
@@ -31,24 +31,25 @@ class DFIVTrainer(object):
         if self.gpu_flg:
             logger.info("gpu mode")
         # configure training params
-        self.lam1: float =  train_params['lam1']
-        self.lam2: float = train_params['lam2']
-        self.stage1_iter: int = train_params['stage1_iter']
-        self.stage2_iter: int = train_params['stage2_iter']
-        self.covariate_iter: int = train_params['covariate_iter']
-        self.n_epoch: int = train_params['n_epoch']
-        self.split_ratio: float = train_params['split_ratio']
+        self.lam1: float =  train_configs['lam1']
+        self.lam2: float = train_configs['lam2']
+        self.stage1_iter: int = train_configs['stage1_iter']
+        self.stage2_iter: int = train_configs['stage2_iter']
+        self.covariate_iter: int = train_configs['covariate_iter']
+        self.n_epoch: int = train_configs['n_epoch']
+        self.split_ratio: float = train_configs['split_ratio']
         self.add_stage1_intercept = True
         self.add_stage2_intercept = True
-        self.treatment_weight_decay = train_params['treatment_weight_decay']
-        self.instrumental_weight_decay = train_params['instrumental_weight_decay']
-        self.covariate_weight_decay = train_params['covariate_weight_decay']
-        self.treatment_lr = train_params['treatment_lr']
-        self.instrumental_lr = train_params['instrumental_lr']
-        self.covariate_lr = train_params['covariate_lr']
-        self.lr_scheduler = train_params['lr_scheduler']
+        self.treatment_weight_decay = train_configs['treatment_weight_decay']
+        self.instrumental_weight_decay = train_configs['instrumental_weight_decay']
+        self.covariate_weight_decay = train_configs['covariate_weight_decay']
+        self.treatment_lr = train_configs['treatment_lr']
+        self.instrumental_lr = train_configs['instrumental_lr']
+        self.covariate_lr = train_configs['covariate_lr']
+        self.lr_scheduler = train_configs['lr_scheduler']
 
         # build networks
+        data_configs['model_configs'] = model_configs
         networks = build_extractor(**data_configs)
         self.treatment_net: nn.Module = networks[0]
         self.instrumental_net: nn.Module = networks[1]
@@ -71,10 +72,10 @@ class DFIVTrainer(object):
                                                   weight_decay=self.covariate_weight_decay,
                                                   lr=self.covariate_lr)
         if self.lr_scheduler:
-            self.treatment_lr_scheduler = ExponentialLR(self.treatment_opt, gamma=0.8)
-            self.instrumental_lr_scheduler = ExponentialLR(self.instrumental_opt, gamma=0.8)
+            self.treatment_lr_scheduler = ExponentialLR(self.treatment_opt, gamma=train_configs['treatment_lr_gamma'])
+            self.instrumental_lr_scheduler = ExponentialLR(self.instrumental_opt, gamma=train_configs['instrumental_lr_gamma'])
             if self.covariate_net:
-                self.covariate_lr_scheduler = ExponentialLR(self.covariate_opt, gamma=0.95)
+                self.covariate_lr_scheduler = ExponentialLR(self.covariate_opt, gamma=train_configs['covariate_lr_gamma'])
 
         # build monitor
         self.monitor = None

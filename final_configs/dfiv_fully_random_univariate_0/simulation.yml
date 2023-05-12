@@ -5,16 +5,12 @@ iv:
     num_nodes: 1
     graph_density: [f-range, 0, 1]
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -40,16 +36,12 @@ iv-ts:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -79,16 +71,12 @@ ov_x:
     hidden_nodes: random
     graph_density: [f-range, 0, 1]
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -114,16 +102,12 @@ ov_x-ts:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -149,16 +133,12 @@ cf-ts:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -186,16 +166,12 @@ ts:
     num_nodes: 1
     graph_density: [f-range, 0, 1]
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
-      mu_: [[f-range, -2, -1, 1, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
+      mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -221,16 +197,12 @@ ts-ot:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -260,16 +232,12 @@ ov_y:
     hidden_nodes: random
     graph_density: [f-range, 0, 1]
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -295,16 +263,12 @@ ov_y-ot:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -334,16 +298,12 @@ cf:
     hidden_nodes: 1
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -369,16 +329,12 @@ cf-ot:
   graph:
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:
@@ -408,16 +364,12 @@ ot:
     num_nodes: 1
     graph_density: 0
   nodes:
-    bernoulli:
-      p_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     gaussian:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     lognormal:
       mu_: [[f-range, -2, 2] , [f-range, -2, 2] , [f-range, -2, 2]]
       sigma_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
-    poisson:
-      lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
     exponential:
       lambda_: [[f-range, 1, 2] , [f-range, 0, 2] , [f-range, 1, 2]]
   edges:

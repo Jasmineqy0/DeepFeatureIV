@@ -1,0 +1,112 @@
+program: main.py
+command:
+- python
+- ${program}
+- "final_configs/dfiv_fully_random_interaction_5x_2/configs.json"
+- "dfiv"
+method: bayes
+metric:
+  goal: minimize
+  name: test loss
+early_terminate:
+  type: hyperband
+  min_iter: 4
+parameters:
+  data_configs:
+    parameters:
+      data_name: 
+        value: fully_random_iv
+      fully_random_num: 
+        value: 1
+      bootstrap_seed: 
+        value: 2
+      data_size: 
+        value: 5000
+      guideline_path: 
+        value: final_configs/dfiv_fully_random_interaction_5x_2/simulation.yml
+  model_configs:
+    parameters:
+      batch_normalization:
+        distribution: categorical
+        values:
+          - True
+          - False
+      layer:
+        distribution: int_uniform
+        min: 1
+        max: 4
+      hidden_dim:
+        distribution: int_uniform
+        min: 10
+        max: 50
+  train_configs:
+    parameters:
+      lam1:
+        distribution: uniform
+        min: 0.05
+        max: 0.15
+      lam2:
+        distribution: uniform
+        min: 0.05
+        max: 0.15
+      stage1_iter:
+        distribution: int_uniform
+        min: 0
+        max: 10
+      covariate_iter:
+        distribution: int_uniform
+        min: 0
+        max: 10
+      stage2_iter:
+        distribution: int_uniform
+        min: 0
+        max: 10
+      n_epoch:
+        distribution: int_uniform
+        min: 90
+        max: 180
+      split_ratio:
+        distribution: uniform
+        min: 0.4
+        max: 0.6
+      lr_scheduler: 
+        distribution: categorical
+        values:
+          - True
+          - False
+      treatment_lr_gamma:
+        distribution: uniform
+        min: 0.9
+        max: 0.99
+      instrumental_lr_gamma:
+        distribution: uniform
+        min: 0.9
+        max: 0.99
+      covariate_lr_gamma:
+        distribution: uniform
+        min: 0.9
+        max: 0.99
+      treatment_lr:
+        distribution: uniform
+        min: 0.0000001
+        max: 0.0001
+      instrumental_lr:
+        distribution: uniform
+        min: 0.0000001
+        max: 0.0001
+      covariate_lr:
+        distribution: uniform
+        min: 0.0000001
+        max: 0.0001
+      treatment_weight_decay:
+        distribution: uniform
+        min: 0
+        max: 0.000001
+      instrumental_weight_decay:
+        distribution: uniform
+        min: 0
+        max: 0.000001
+      covariate_weight_decay:
+        distribution: uniform
+        min: 0
+        max: 0.000001

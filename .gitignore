@@ -16,3 +16,5 @@ wandb
 parcs
 scripts
 tmp
+
+final_configs/*/*/

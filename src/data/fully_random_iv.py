@@ -7,9 +7,9 @@ import yaml
 
 TEST_SEED = 9999
     
-def generate_train_fully_random_iv(config_info, sample_size, rand_seed):
-    config_path = config_info['config_path']
-    var_info_path = config_info['var_info_path']
+def generate_train_fully_random_iv(simulation_info, sample_size, rand_seed):
+    config_path = simulation_info['config_path']
+    var_info_path = simulation_info['var_info_path']
 
     # get the initial random state
     start_random_state = np.random.get_state()
@@ -29,9 +29,9 @@ def generate_train_fully_random_iv(config_info, sample_size, rand_seed):
     np.random.set_state(start_random_state)
     return train_data
     
-def generate_test_fully_random_iv(config_info):
-    config_path = config_info['config_path']
-    var_info_path = config_info['var_info_path']
+def generate_test_fully_random_iv(simulation_info):
+    config_path = simulation_info['config_path']
+    var_info_path = simulation_info['var_info_path']
     
     # extract observed covariates
     with open(var_info_path, 'r') as f:
