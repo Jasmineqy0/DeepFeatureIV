@@ -64,15 +64,15 @@ def generate_test_fully_random_iv(simulation_info):
     treatment_intervention = np.zeros((num_intervention, len(treatment_cols)))
     covariate_intervention = np.zeros((num_intervention, len(covariate_cols)))
     
-    for i in range(len(treatment_cols)):
+    for i in range(len(treatment_cols)): # sample evenly from the min and max of the treatments and shuffle
         treatment_intervention[:, i] = np.linspace(treatment_min[i], treatment_max[i], num_intervention)
         np.random.shuffle(treatment_intervention[:, i])
     
-    for i in range(len(covariate_cols)):
+    for i in range(len(covariate_cols)): # sample evenly from the min and max of the covariates and shuffle
         covariate_intervention[:, i] = np.linspace(covariate_min[i], covariate_max[i], num_intervention)
         np.random.shuffle(covariate_intervention[:, i])
     
-    interventions = []
+    interventions = [] # zip the treatments and covariates together as interventions
     for i in range(num_intervention):
         intervention_cols = treatment_cols + covariate_cols
         intervention_values = np.hstack((treatment_intervention[i, :], covariate_intervention[i, :])).squeeze().tolist()
