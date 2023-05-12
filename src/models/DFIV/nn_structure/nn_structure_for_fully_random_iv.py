@@ -23,8 +23,6 @@ def create_neural_network(input_size, hidden_layer, hidden_dim, output_dim, batc
         
     # output layer
     layers.append(nn.Linear(hidden_dim, output_dim))
-    if batch_normalization:
-        layers.append(nn.BatchNorm1d(hidden_dim))
     
     # Create and return the sequential model
     model = nn.Sequential(*layers)
