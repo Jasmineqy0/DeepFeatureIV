@@ -1,5 +1,5 @@
 {
-    "n_repeat": 5,
+    "n_repeat": 20,
     "data_configs": {
         "data_name": "demand",
         "data_size": [

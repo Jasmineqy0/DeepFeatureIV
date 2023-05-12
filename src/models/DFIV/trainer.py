@@ -76,6 +76,9 @@ class DFIVTrainer(object):
             self.instrumental_lr_scheduler = ExponentialLR(self.instrumental_opt, gamma=train_configs['instrumental_lr_gamma'])
             if self.covariate_net:
                 self.covariate_lr_scheduler = ExponentialLR(self.covariate_opt, gamma=train_configs['covariate_lr_gamma'])
+                
+        # model dump folder
+        self.dump_folder = dump_folder
 
         # build monitor
         self.monitor = None
@@ -96,6 +99,7 @@ class DFIVTrainer(object):
         oos_result : float
             The performance of model evaluated by oos
         """
+        # generate data
         train_data = generate_train_data(validation=False, rand_seed=rand_seed, **self.data_config)
         test_data = generate_test_data(rand_seed=rand_seed, **self.data_config)
         train_1st_t, train_2nd_t = self.split_train_data(train_data)
@@ -107,6 +111,7 @@ class DFIVTrainer(object):
             
         # mutual_info_regression(train_1st_t.instrument, train_1st_t.covariate, discrete_features=[False])
 
+        # configure monitor for logging training, validating and testing
         if self.monitor is not None:
             new_rand_seed = np.random.randint(1e5)
             new_data_config = copy.copy(self.data_config)
@@ -121,6 +126,7 @@ class DFIVTrainer(object):
         self.lam1 *= train_1st_t[0].size()[0]
         self.lam2 *= train_2nd_t[0].size()[0]
 
+        # train
         for t in range(self.n_epoch):
             self.stage1_update(train_1st_t, verbose, t)
             if self.covariate_net:
@@ -131,14 +137,24 @@ class DFIVTrainer(object):
             if verbose >= 1:
                 logger.info(f"Epoch {t} ended")
 
+        # fit
         mdl = DFIVModel(self.treatment_net, self.instrumental_net, self.covariate_net,
                         self.add_stage1_intercept, self.add_stage2_intercept, self.wandb_log)
         mdl.fit_t(train_1st_t, train_2nd_t, self.lam1, self.lam2)
         if self.gpu_flg:
             torch.cuda.empty_cache()
-
+        # evaluate
         res = mdl.evaluate_t(test_data_t)
-
+        
+        # save model
+        model_path = Path(self.dump_folder) / 'model.pth'
+        torch.save({
+            'treatment_net': self.treatment_net.state_dict(),
+            'covariate_net': self.covariate_net.state_dict() if self.covariate_net else None,
+        }, model_path)
+        wandb.save(str(model_path), policy='end')
+        
+        # wandb finishes
         wandb.finish()
 
         return res
