@@ -1,9 +1,14 @@
 from pathlib import Path
 import shutil
-from typing import Any, Dict
+from typing import Any, Dict, Union
+
+import yaml
 from simulator.full_random_simulation import randomize_once
-from src.data.parcs_simulation.parcs_simulate import constant_rho_sigma
+from src.data.parcs_simulation.parcs_simulate import get_config_file
 import re
+import logging
+
+logger = logging.getLogger()
 
 CONFIG_FILE = 'sweep.yml'
 
@@ -52,6 +57,20 @@ def revise_dump_name(data_param, dump_name):
         dump_name = dump_name[:start_idx] + seed_str + '-'+ guideline_str + dump_name[end_idx:]
 
     return dump_name
+
+def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
+    logger.info(f'Revising parcs config file with rho={rho} and sigma={sigma}.')
+
+    config_yml = get_config_file(config_name)
+
+    with open(config_yml, 'r') as f:
+        parcs_config = yaml.safe_load(f)
+        parcs_config['rho'] = f'constant({rho})'
+        if sigma is not None:
+            parcs_config['sigma'] = f'constant({sigma})'
+
+    with open(config_yml, 'w') as f:
+        yaml.dump(parcs_config, f)
 
 def revise_parcs_config(data_param):
      # revise parcs' config for different rho and sigma in demand simulation

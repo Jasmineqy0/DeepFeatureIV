@@ -1,7 +1,8 @@
 {
     "n_repeat": 5,
-    "data": {
-        "data_name": "demand",
+    "data_configs": {
+        "data_name": "demand_parcs",
+        "parcs_config": "demand_original",
         "data_size": [
             1000,
             5000,
@@ -12,11 +13,9 @@
             0.5,
             0.9
         ],
-        "sigma": null,
-        "parcs": true,
-        "parcs_config": "demand_original"
+        "sigma": null
     },
-    "train_params": {
+    "train_configs": {
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,

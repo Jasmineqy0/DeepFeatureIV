@@ -3,6 +3,7 @@ import numpy as np
 
 from .demand_design_image import generate_test_demand_design_image, generate_train_demand_design_image
 from .demand_design import generate_test_demand_design, generate_train_demand_design
+from .demand_design_parcs import generate_train_demand_design_parcs, generate_test_demand_design_parcs
 from .dsprine import generate_train_dsprite, generate_test_dsprite
 from .spaceiv import generate_train_spaceiv, generate_test_spaceiv
 from .data_class import TrainDataSet, TestDataSet
@@ -12,6 +13,8 @@ from .fully_random_iv import generate_train_fully_random_iv, generate_test_fully
 def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args) -> TrainDataSet:
     if data_name == "demand":
         return generate_train_demand_design(rand_seed=rand_seed, old_flg=False, **args)
+    elif data_name == "demand_parcs":
+        return generate_train_demand_design_parcs(rand_seed=rand_seed, **args)
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
         return generate_train_demand_design(rand_seed=rand_seed, old_flg=True, **args)
@@ -30,6 +33,8 @@ def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args
 def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
     if data_name == "demand":
         return generate_test_demand_design(False)
+    elif data_name == "demand_parcs":
+        return generate_test_demand_design_parcs(args['parcs_config'])
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
         return generate_test_demand_design(True)

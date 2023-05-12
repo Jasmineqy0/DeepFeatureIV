@@ -37,12 +37,12 @@ def get_trainer(alg_name: str):
 def run_one(alg_name: str, data_configs: Dict[str, Any], train_configs: Dict[str, Any],
             use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int, 
             group: str, model_configs: Dict[str, Any]=None):
-    # # initialize wandb
-    # wandb.init(project="DeepFeatureIV", group=group,
-    #             config={'data_configs': data_configs, 'train_configs': train_configs, 'model_configs': model_configs, 'experiment_id': experiment_id})
+    # initialize wandb
+    wandb.init(project="DeepFeatureIV", group=group,
+                config={'data_configs': data_configs, 'train_configs': train_configs, 'model_configs': model_configs, 'experiment_id': experiment_id})
     
-    wandb.init(group='sweep3')
-    wandb.config.data_configs['simulation_info'] = data_configs['simulation_info']
+    # wandb.init(group='sweep3')
+    # wandb.config.data_configs['simulation_info'] = data_configs['simulation_info']
     
     # get the model class
     Trainer_cls = get_trainer(alg_name)
