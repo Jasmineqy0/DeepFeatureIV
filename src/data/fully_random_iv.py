@@ -60,7 +60,7 @@ def generate_test_fully_random_iv(simulation_info):
     covariate_max = bootstrap_samples[covariate_cols].max(axis=0)
     
     # generate interventions
-    num_intervention, samples_per_intervention = 250, 10
+    num_intervention, samples_per_intervention = 2500, 1
     treatment_intervention = np.zeros((num_intervention, len(treatment_cols)))
     covariate_intervention = np.zeros((num_intervention, len(covariate_cols)))
     
