@@ -28,64 +28,36 @@ parameters:
     parameters:
       batch_normalization:
         value: true
-      instrumental_hidden_layer:
+      num_layer:
         distribution: int_uniform
-        min: 3
-        max: 5
-      treatment_hidden_layer:
+        min: 2
+        max: 4
+      hidden_dim:
         distribution: int_uniform
-        min: 3
-        max: 5
-      covariate_hidden_layer:
-        distribution: int_uniform
-        min: 3
-        max: 5
-      instrumental_hidden_dim:
-        distribution: int_uniform
-        min: 30
-        max: 64
-      treatment_hidden_dim:
-        distribution: int_uniform
-        min: 30
-        max: 64
-      covariate_hidden_dim:
-        distribution: int_uniform
-        min: 30
-        max: 64
-      instrumental_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
-      treatment_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
-      covariate_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
+        min: 20
+        max: 30
   train_configs:
     parameters:
       lam1:
         distribution: uniform
-        min: 0.10
+        min: 0.5
         max: 0.15
       lam2:
         distribution: uniform
-        min: 0.10
+        min: 0.1
         max: 0.20
       stage1_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       covariate_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       stage2_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       n_epoch:
         distribution: int_uniform
         min: 90

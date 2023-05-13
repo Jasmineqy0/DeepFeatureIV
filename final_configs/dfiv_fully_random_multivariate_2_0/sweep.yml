@@ -30,28 +30,28 @@ parameters:
         value: true
       instrumental_hidden_layer:
         distribution: int_uniform
-        min: 4
-        max: 10
+        min: 2
+        max: 4
       treatment_hidden_layer:
         distribution: int_uniform
-        min: 4
-        max: 10
+        min: 2
+        max: 4
       covariate_hidden_layer:
         distribution: int_uniform
-        min: 4
-        max: 10
+        min: 2
+        max: 4
       instrumental_hidden_dim:
         distribution: int_uniform
-        min: 128
-        max: 256
+        min: 50
+        max: 128
       treatment_hidden_dim:
         distribution: int_uniform
-        min: 128
-        max: 256
+        min: 50
+        max: 128
       covariate_hidden_dim:
         distribution: int_uniform
-        min: 80
-        max: 160
+        min: 50
+        max: 128
       instrumental_output_dim: 
         distribution: int_uniform
         min: 8
@@ -89,13 +89,16 @@ parameters:
       n_epoch:
         distribution: int_uniform
         min: 90
-        max: 180
+        max: 160
       split_ratio:
         distribution: uniform
         min: 0.4
         max: 0.6
       lr_scheduler: 
-        value: true
+        distribution: categorical
+        values:
+          - True
+          - False
       treatment_lr_gamma:
         distribution: uniform
         min: 0.95
@@ -114,8 +117,8 @@ parameters:
         max: 0.0001
       instrumental_lr:
         distribution: uniform
-        min: 0.00001
-        max: 0.0001
+        min: 0.000001
+        max: 0.00001
       covariate_lr:
         distribution: uniform
         min: 0.00001
@@ -123,12 +126,12 @@ parameters:
       treatment_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00000001
       instrumental_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00000001
       covariate_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00000001
