@@ -5,7 +5,7 @@
         "fully_random_num": 1,
         "bootstrap_seed": 0,
         "data_size": 10000,
-        "guideline_path": "final_configs/dfiv_fully_random_interaction10x_0/simulation.yml" 
+        "guideline_path": "final_configs/dfiv_fully_random_interaction_10x_0/simulation.yml"
     },
     "model_configs":{
         "batch_normalization": false,
