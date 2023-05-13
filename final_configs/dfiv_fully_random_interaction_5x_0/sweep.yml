@@ -30,49 +30,49 @@ parameters:
         value: true
       instrumental_hidden_layer:
         distribution: int_uniform
-        min: 1
-        max: 10
+        min: 2
+        max: 8
       treatment_hidden_layer:
         distribution: int_uniform
-        min: 1
-        max: 10
+        min: 2
+        max: 8
       covariate_hidden_layer:
         distribution: int_uniform
-        min: 1
-        max: 10
+        min: 2
+        max: 8
       instrumental_hidden_dim:
         distribution: int_uniform
-        min: 10
-        max: 128
+        min: 50
+        max: 100
       treatment_hidden_dim:
         distribution: int_uniform
-        min: 10
-        max: 128
+        min: 50
+        max: 100
       covariate_hidden_dim:
         distribution: int_uniform
-        min: 10
-        max: 128
+        min: 50
+        max: 100
       instrumental_output_dim: 
         distribution: int_uniform
         min: 1
-        max: 16
+        max: 8
       treatment_output_dim: 
         distribution: int_uniform
         min: 1
-        max: 16
+        max: 8
       covariate_output_dim: 
         distribution: int_uniform
-        min: 1
+        min: 5
         max: 16
   train_configs:
     parameters:
       lam1:
         distribution: uniform
-        min: 0.08
+        min: 0.1
         max: 0.2
       lam2:
         distribution: uniform
-        min: 0.08
+        min: 0.1
         max: 0.2
       stage1_iter:
         distribution: int_uniform
@@ -101,15 +101,15 @@ parameters:
           - False
       treatment_lr_gamma:
         distribution: uniform
-        min: 0.9
+        min: 0.95
         max: 0.99
       instrumental_lr_gamma:
         distribution: uniform
-        min: 0.9
+        min: 0.95
         max: 0.99
       covariate_lr_gamma:
         distribution: uniform
-        min: 0.9
+        min: 0.95
         max: 0.99
       treatment_lr:
         distribution: uniform
