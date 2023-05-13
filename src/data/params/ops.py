@@ -12,7 +12,7 @@ logger = logging.getLogger()
 
 CONFIG_FILE = 'sweep.yml'
 
-BOOTSTRAP_SIZE = 1500
+BOOTSTRAP_SIZE = 2000
 
 def generate_data_config_info(guideline_path, fully_random_num, bootsrap_seed):
     config_file, var_info_file = 'config.yml', 'var_info.yml'

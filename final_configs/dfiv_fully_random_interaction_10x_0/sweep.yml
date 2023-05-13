@@ -55,15 +55,15 @@ parameters:
       instrumental_output_dim: 
         distribution: int_uniform
         min: 8
-        max: 16
+        max: 12
       treatment_output_dim: 
         distribution: int_uniform
         min: 8
-        max: 16
+        max: 12
       covariate_output_dim: 
         distribution: int_uniform
         min: 8
-        max: 16
+        max: 12
   train_configs:
     parameters:
       lam1:
@@ -89,7 +89,7 @@ parameters:
       n_epoch:
         distribution: int_uniform
         min: 90
-        max: 180
+        max: 160
       split_ratio:
         distribution: uniform
         min: 0.4

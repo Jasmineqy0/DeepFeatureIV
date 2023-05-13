@@ -30,45 +30,45 @@ parameters:
         value: true
       instrumental_hidden_layer:
         distribution: int_uniform
-        min: 2
+        min: 3
         max: 5
       treatment_hidden_layer:
         distribution: int_uniform
-        min: 2
+        min: 3
         max: 5
       covariate_hidden_layer:
         distribution: int_uniform
-        min: 2
+        min: 3
         max: 5
       instrumental_hidden_dim:
         distribution: int_uniform
         min: 30
-        max: 100
+        max: 64
       treatment_hidden_dim:
         distribution: int_uniform
         min: 30
-        max: 100
+        max: 64
       covariate_hidden_dim:
         distribution: int_uniform
         min: 30
-        max: 100
+        max: 64
       instrumental_output_dim: 
         distribution: int_uniform
-        min: 1
+        min: 8
         max: 16
       treatment_output_dim: 
         distribution: int_uniform
-        min: 1
+        min: 8
         max: 16
       covariate_output_dim: 
         distribution: int_uniform
-        min: 1
+        min: 8
         max: 16
   train_configs:
     parameters:
       lam1:
         distribution: uniform
-        min: 0.05
+        min: 0.10
         max: 0.15
       lam2:
         distribution: uniform
@@ -76,15 +76,15 @@ parameters:
         max: 0.20
       stage1_iter:
         distribution: int_uniform
-        min: 0
+        min: 15
         max: 20
       covariate_iter:
         distribution: int_uniform
-        min: 0
+        min: 15
         max: 20
       stage2_iter:
         distribution: int_uniform
-        min: 0
+        min: 15
         max: 20
       n_epoch:
         distribution: int_uniform
@@ -110,15 +110,15 @@ parameters:
         max: 0.99
       treatment_lr:
         distribution: uniform
-        min: 0.0000001
-        max: 0.00009
+        min: 0.00001
+        max: 0.0001
       instrumental_lr:
         distribution: uniform
-        min: 0.0000001
-        max: 0.00009
+        min: 0.00001
+        max: 0.0001
       covariate_lr:
         distribution: uniform
-        min: 0.0000001
+        min: 0.00001
         max: 0.0001
       treatment_weight_decay:
         distribution: uniform

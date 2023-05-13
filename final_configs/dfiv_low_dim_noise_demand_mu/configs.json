@@ -2,6 +2,7 @@
     "n_repeat": 5,
     "data": {
         "data_name": "demand",
+        "parcs_config": ["demand_noise_price_2", "demand_noise_price_4", "demand_noise_price_8"],
         "data_size": [
             1000,
             5000,
@@ -12,10 +13,7 @@
             0.5,
             0.9
         ],
-        "sigma": null,
-        "parcs": true,
-        "collider": false,
-        "parcs_config": ["demand_noise_price_2", "demand_noise_price_4", "demand_noise_price_8"]
+        "sigma": null
     },
     "train_params": {
         "wandb": true,
