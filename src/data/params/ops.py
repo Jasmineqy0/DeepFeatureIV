@@ -12,7 +12,7 @@ logger = logging.getLogger()
 
 CONFIG_FILE = 'sweep.yml'
 
-BOOTSTRAP_SIZE = 2000
+BOOTSTRAP_SIZE = 3000
 
 def generate_data_config_info(guideline_path, fully_random_num, bootsrap_seed):
     config_file, var_info_file = 'config.yml', 'var_info.yml'
@@ -47,6 +47,8 @@ def add_data_param(data_config: Dict[str, Any]):
             data_config['simulation_info'] = generate_data_config_info(data_config['guideline_path'], 
                                                                        data_config['fully_random_num'],
                                                                        data_config['bootstrap_seed'])
+        else:
+            data_config['simulation_info'] = None
 
 def revise_dump_name(data_param, dump_name):
     if data_param['data_name'] == 'fully_random_iv':

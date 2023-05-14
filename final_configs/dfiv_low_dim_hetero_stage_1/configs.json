@@ -1,7 +1,7 @@
 {
     "n_repeat": 5,
-    "data": {
-        "data_name": "demand_parcs",
+    "data_configs": {
+        "data_name": "demand_parcs_revise",
         "parcs_config": "demand_hetero_stage_1",
         "data_size": [
             1000,
@@ -15,8 +15,7 @@
         ],
         "sigma": [0, 0.2, 1, 1.8]
     },
-    "train_params": {
-        "wandb": true,
+    "train_configs": {
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,
@@ -24,6 +23,10 @@
         "stage2_iter": 1,
         "n_epoch": 100,
         "split_ratio": 0.5,
+        "treatment_lr": 1e-3,
+        "instrumental_lr": 1e-3,
+        "covariate_lr": 1e-3,
+        "lr_scheduler": false,
         "treatment_weight_decay": 0.0,
         "instrumental_weight_decay": 0.0,
         "covariate_weight_decay": 0.1

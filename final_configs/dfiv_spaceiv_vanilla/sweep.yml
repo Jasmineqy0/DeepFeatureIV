@@ -2,7 +2,7 @@ program: main.py
 command:
 - python
 - ${program}
-- "final_configs/dfiv_fully_random_univariate_0/configs.json"
+- "final_configs/dfiv_spaceiv_vanilla/configs.json"
 - "dfiv"
 method: bayes
 metric:
@@ -15,15 +15,21 @@ parameters:
   data_configs:
     parameters:
       data_name: 
-        value: fully_random_iv
-      fully_random_num: 
-        value: 1
-      bootstrap_seed: 
-        value: 0
+        value: spaceiv
+      spaceiv_datadir: 
+        value: "../spaceIV/data"
+      case: 
+        value: "case:vanilla"
       data_size: 
-        value: 5000
-      guideline_path: 
-        value: final_configs/dfiv_fully_random_uivariate_0/simulation.yml
+        value: 1600
+      val_size: 
+        value: 180
+      test_size:
+        value: 180
+      dim_iv:
+        value: 10
+      dim_ts:
+        value: 20
   model_configs:
     parameters:
       batch_normalization:
@@ -33,12 +39,12 @@ parameters:
           - False
       num_layer:
         distribution: int_uniform
-        min: 2
-        max: 4
+        min: 1
+        max: 5
       hidden_dim:
         distribution: int_uniform
-        min: 20
-        max: 30
+        min: 10
+        max: 64
   train_configs:
     parameters:
       lam1:

@@ -1,17 +1,21 @@
 {
     "n_repeat": 20,
-    "data": {
+    "data_configs": {
         "data_name": "spaceiv",
         "spaceiv_datadir": "../spaceIV/data",
         "case": ["case_hc_num:3", "case_hc_num:5", "case_hc_num:7"],
         "data_size": 1600,
         "val_size": 180,
         "test_size": 180,
-        "div": 10,
-        "dts": 20
+        "dim_iv": 10,
+        "dim_ts": 20
     },
-    "train_params": {
-        "wandb": true,
+    "model_configs": {
+        "batch_normalization": false,
+        "num_layer": 3,
+        "hidden_dim": 25
+    },
+    "train_configs": {
         "lam1": 0.1,
         "lam2": 0.1,
         "stage1_iter": 20,
@@ -19,6 +23,10 @@
         "stage2_iter": 1,
         "n_epoch": 100,
         "split_ratio": 0.5,
+        "treatment_lr": 1e-3,
+        "instrumental_lr": 1e-3,
+        "covariate_lr": 1e-3,
+        "lr_scheduler": false,
         "treatment_weight_decay": 0.0,
         "instrumental_weight_decay": 0.0,
         "covariate_weight_decay": 0.1

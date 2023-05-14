@@ -2,7 +2,7 @@ program: main.py
 command:
 - python
 - ${program}
-- "final_configs/dfiv_fully_random_multivariate_0/configs.json"
+- "final_configs/dfiv_low_dim_parcs_revise/configs.json"
 - "dfiv"
 method: bayes
 metric:

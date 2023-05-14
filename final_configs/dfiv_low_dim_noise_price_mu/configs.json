@@ -2,7 +2,9 @@
     "n_repeat": 5,
     "data_configs": {
         "data_name": "demand_parcs_revise",
-        "parcs_config": "demand_hetero_stage_2",
+        "parcs_config": ["demand_noise_price_mu_4", 
+                         "demand_noise_price_mu_8", 
+                         "demand_noise_price_mu_16"],
         "data_size": [
             1000,
             5000,
@@ -13,7 +15,7 @@
             0.5,
             0.9
         ],
-        "sigma": [0, 0.2, 1, 1.8]
+        "sigma": null
     },
     "train_configs": {
         "lam1": 0.1,

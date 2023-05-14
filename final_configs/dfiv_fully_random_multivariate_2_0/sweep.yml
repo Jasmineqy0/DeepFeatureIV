@@ -21,71 +21,46 @@ parameters:
       bootstrap_seed: 
         value: 0
       data_size: 
-        value: 5000
+        value: 10000
       guideline_path: 
         value: final_configs/dfiv_fully_random_multivariate_2_0/simulation.yml
   model_configs:
     parameters:
       batch_normalization:
-        value: true
-      instrumental_hidden_layer:
+        distribution: categorical
+        values:
+          - True
+          - False
+      num_layer:
         distribution: int_uniform
-        min: 2
+        min: 1
         max: 4
-      treatment_hidden_layer:
+      hidden_dim:
         distribution: int_uniform
-        min: 2
-        max: 4
-      covariate_hidden_layer:
-        distribution: int_uniform
-        min: 2
-        max: 4
-      instrumental_hidden_dim:
-        distribution: int_uniform
-        min: 50
-        max: 128
-      treatment_hidden_dim:
-        distribution: int_uniform
-        min: 50
-        max: 128
-      covariate_hidden_dim:
-        distribution: int_uniform
-        min: 50
-        max: 128
-      instrumental_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
-      treatment_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
-      covariate_output_dim: 
-        distribution: int_uniform
-        min: 8
-        max: 16
+        min: 10
+        max: 64
   train_configs:
     parameters:
       lam1:
         distribution: uniform
-        min: 0.1
-        max: 0.2
+        min: 0.05
+        max: 0.15
       lam2:
         distribution: uniform
-        min: 0.1
-        max: 0.2
+        min: 0.10
+        max: 0.20
       stage1_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       covariate_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       stage2_iter:
         distribution: int_uniform
-        min: 15
-        max: 20
+        min: 5
+        max: 10
       n_epoch:
         distribution: int_uniform
         min: 90
@@ -113,25 +88,25 @@ parameters:
         max: 0.99
       treatment_lr:
         distribution: uniform
-        min: 0.00001
+        min: 0.000001
         max: 0.0001
       instrumental_lr:
         distribution: uniform
         min: 0.000001
-        max: 0.00001
+        max: 0.0001
       covariate_lr:
         distribution: uniform
-        min: 0.00001
+        min: 0.000001
         max: 0.0001
       treatment_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.00000001
+        max: 0.0000001
       instrumental_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.00000001
+        max: 0.0000001
       covariate_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.00000001
+        max: 0.0000001

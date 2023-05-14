@@ -10,6 +10,7 @@ from .nn_structure_for_demand_image import build_net_for_demand_image
 from .nn_structure_for_dsprite import build_net_for_dsprite
 from .nn_structure_for_spaceiv import build_net_for_spaceiv
 from .nn_structure_for_fully_random_iv import build_net_for_fully_random_iv
+from .nn_structure_for_demand_revise import build_net_for_demand_revise
 
 import logging
 
@@ -20,6 +21,9 @@ def build_extractor(data_name: str, **args) -> Tuple[nn.Module, nn.Module, Optio
     if data_name == "demand" or data_name == "demand_parcs":
         logger.info("build without image")
         return build_net_for_demand()
+    if data_name == "demand_parcs_revise":
+        logger.info("build without image")
+        return build_net_for_demand_revise()
     elif data_name == "demand_image":
         logger.info("build with image")
         return build_net_for_demand_image()
@@ -30,9 +34,9 @@ def build_extractor(data_name: str, **args) -> Tuple[nn.Module, nn.Module, Optio
         logger.info("build dsprite model")
         return build_net_for_dsprite()
     elif data_name == 'spaceiv':
-        assert all(key in args for key in ['div', 'dts']), 'div and dts must be specified'
+        assert all(key in args for key in ['dim_iv', 'dim_ts']), "dim_iv and dim_ts must be specified"
         logger.info("build spaceiv model")
-        return build_net_for_spaceiv(args['div'], args['dts'])
+        return build_net_for_spaceiv(args['dim_iv'], args['dim_ts'], args['model_configs'])
     elif data_name == 'fully_random_iv':
         logger.info("build fully random iv model")
         return build_net_for_fully_random_iv(args['simulation_info'], args['model_configs'])
