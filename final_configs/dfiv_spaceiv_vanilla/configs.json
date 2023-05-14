@@ -1,5 +1,5 @@
 {
-    "n_repeat": 20,
+    "n_repeat": 1,
     "data_configs": {
         "data_name": "spaceiv",
         "spaceiv_datadir": "../spaceIV/data",

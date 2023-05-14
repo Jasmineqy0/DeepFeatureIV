@@ -40,11 +40,11 @@ parameters:
       num_layer:
         distribution: int_uniform
         min: 1
-        max: 5
+        max: 3
       hidden_dim:
         distribution: int_uniform
-        min: 10
-        max: 64
+        min: 8
+        max: 32
   train_configs:
     parameters:
       lam1:
@@ -94,25 +94,25 @@ parameters:
         max: 0.99
       treatment_lr:
         distribution: uniform
-        min: 0.00001
+        min: 0.000001
         max: 0.0001
       instrumental_lr:
         distribution: uniform
-        min: 0.00001
+        min: 0.000001
         max: 0.0001
       covariate_lr:
         distribution: uniform
-        min: 0.00001
+        min: 0.000001
         max: 0.0001
       treatment_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00001
       instrumental_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00001
       covariate_weight_decay:
         distribution: uniform
         min: 0
-        max: 0.0000001
+        max: 0.00001

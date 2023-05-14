@@ -11,17 +11,6 @@ import os
 from ..data.data_class import TrainDataSet, TestDataSet
 
 
-def generate_test_spaceiv(spaceiv_datadir, case, test_size, rand_seed, **kwargs) -> TestDataSet:
-    case_dir = os.path.join(spaceiv_datadir, case)
-
-    sample_dir = get_sample_dir(case_dir, rand_seed)
-
-    _, treatments, structurals, _ = get_vars(sample_dir, test_size)
-
-    return TestDataSet(treatment=treatments,
-                       covariate=None,
-                       structural=structurals)
-
 def get_sample_dir(case_dir, rand_seed):
     sample_dir = [dir for dir in os.listdir(case_dir) if re.search(f'.*-{rand_seed}', dir)]
     sample_dir = sample_dir[0]
@@ -92,6 +81,11 @@ def generate_train_spaceiv(spaceiv_datadir:  str, case: str, rand_seed: int, dat
     sample_dir = get_sample_dir(case_dir, rand_seed)
 
     instruments, treatments, structurals, outcome = get_vars(sample_dir, data_size)
+    # shuffle_idx = np.random.randint(0, data_size, data_size)
+    # instruments = instruments[shuffle_idx]
+    # treatments = treatments[shuffle_idx]
+    # structurals = structurals[shuffle_idx]
+    # outcome = outcome[shuffle_idx]
     
     if validation:
         instruments = instruments[-val_size:]
@@ -109,3 +103,14 @@ def generate_train_spaceiv(spaceiv_datadir:  str, case: str, rand_seed: int, dat
                         covariate=None,
                         structural=structurals,
                         outcome=outcome)
+
+def generate_test_spaceiv(spaceiv_datadir, case, test_size, rand_seed, **kwargs) -> TestDataSet:
+    case_dir = os.path.join(spaceiv_datadir, case)
+
+    sample_dir = get_sample_dir(case_dir, rand_seed)
+
+    _, treatments, structurals, _ = get_vars(sample_dir, test_size)
+
+    return TestDataSet(treatment=treatments,
+                       covariate=None,
+                       structural=structurals)
