@@ -1,11 +1,9 @@
 {
-    "n_repeat": 5,
+    "n_repeat": 20,
     "data_configs": {
         "data_name": "demand_parcs_revise",
         "parcs_config": "demand_hetero_stage_1",
         "data_size": [
-            1000,
-            5000,
             10000
         ],
         "rho": [

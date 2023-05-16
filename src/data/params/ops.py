@@ -61,8 +61,6 @@ def revise_dump_name(data_param, dump_name):
     return dump_name
 
 def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
-    logger.info(f'Revising parcs config file with rho={rho} and sigma={sigma}.')
-
     config_yml = get_config_file(config_name)
 
     with open(config_yml, 'r') as f:
@@ -73,10 +71,11 @@ def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
 
     with open(config_yml, 'w') as f:
         yaml.dump(parcs_config, f)
+        
+    logger.info(f'Revised parcs config file with rho={rho} and sigma={sigma}.')
 
 def revise_parcs_config(data_param):
      # revise parcs' config for different rho and sigma in demand simulation
-    if data_param['data_name'] == 'demand':
-        if 'parcs' in data_param and data_param['parcs']:
+    if 'demand' in data_param['data_name'] and 'parcs_config' in data_param:
             assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
             constant_rho_sigma(data_param['rho'], data_param['sigma'], data_param['parcs_config'])

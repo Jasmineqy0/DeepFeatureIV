@@ -38,7 +38,7 @@ def run_one(alg_name: str, data_configs: Dict[str, Any], train_configs: Dict[str
             use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int, 
             group: str, model_configs: Dict[str, Any]=None):
     # initialize wandb
-    project_name = 'parcs_revise'
+    project_name = 'spaceIV_search_1'
     wandb.init(project=project_name, group=group)
     if len(dict(wandb.config)) == 0:
         wandb.config.update({'data_configs': data_configs, 'train_configs': train_configs, 

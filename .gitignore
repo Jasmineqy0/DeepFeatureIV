@@ -10,6 +10,9 @@ venv
 viz/.ipynb_checkpoints
 viz/iframe_figures
 viz/images
+viz/model.pth
+viz/notebook.log
+viz/result.npz
 wandb
 .vscode
 .env
