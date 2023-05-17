@@ -36,10 +36,9 @@ def get_trainer(alg_name: str):
 
 def run_one(alg_name: str, data_configs: Dict[str, Any], train_configs: Dict[str, Any],
             use_gpu: bool, dump_dir_root: Optional[Path], experiment_id: int, verbose: int, 
-            group: str, model_configs: Dict[str, Any]=None):
+            group: str, wandb_project: str, model_configs: Dict[str, Any]=None):
     # initialize wandb
-    project_name = 'spaceIV_search_1'
-    wandb.init(project=project_name, group=group)
+    wandb.init(project=wandb_project, group=group)
     if len(dict(wandb.config)) == 0:
         wandb.config.update({'data_configs': data_configs, 'train_configs': train_configs, 
                              'model_configs': model_configs, 'experiment_id': experiment_id})
@@ -67,6 +66,7 @@ def experiments(alg_name: str,
     train_configs: Dict[str, Any] = configs["train_configs"]
     model_configs: Dict[str, Any] = configs["model_configs"] if "model_configs" in configs else None
     org_data_configs: Dict[str, Any] = configs["data_configs"]
+    wandb_project: str = configs["wandb_project"] if "wandb_project" in configs else "default"
     n_repeat: int = configs["n_repeat"]
 
     if num_cpus <= 1:
@@ -94,7 +94,7 @@ def experiments(alg_name: str,
 
         # run one configuration n_repeat times
         tasks = [run_one(alg_name, exp_data_configs, train_configs,
-                                use_gpu, one_dump_dir, idx, verbose, dump_dir.name, model_configs) for idx in range(n_repeat)]
+                                use_gpu, one_dump_dir, idx, verbose, dump_dir.name, wandb_project, model_configs) for idx in range(n_repeat)]
         
         # # save treatment, covariate, prediction, target(structural) & oos_loss
         # res_new = defaultdict(list)
