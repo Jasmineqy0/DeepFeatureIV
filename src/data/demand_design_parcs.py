@@ -55,29 +55,6 @@ def generate_test_demand_design_parcs(parcs_config: Union[Path, str]) -> TestDat
         samples = g.do(size=1, interventions=intervention)
         data.append([samples['price'][0], samples['time'][0], samples['emotion'][0]])
         target.append(f(samples['price'][0], samples['time'][0], samples['emotion'][0]))
-
-
-    # data = []
-    # target = []
-    # for p, t, s in product(price, time, emotion):
-    #     data.append([p, t, s])
-    #     target.append(f(p, t, s))
-    
-    # # test data for CATE w.r.t. time with size 1000
-    # p = [25]  # do(P=25)
-    # time = np.linspace(0.0, 10, 1000)
-    # emu = [4] # E[mu] = 4
-    # for p, t, s in product(p, time, emu):
-    #     data.append([p, t, s])
-    #     target.append(f(p, t, s))  
-    
-    # # test data ATE w.r.t. Price with size 1000
-    # p = np.linspace(10, 25, 1000)
-    # tmu = [5] # E[time] = 5
-    # emu = [4] # E[emotion] = 4
-    # for p, t, s in product(p, tmu, emu):
-    #     data.append([p, t, s])
-    #     target.append(f(p, t, s))  
     
     features = np.array(data)
     targets: np.ndarray = np.array(target)[:, np.newaxis]
