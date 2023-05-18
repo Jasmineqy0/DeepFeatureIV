@@ -19,7 +19,6 @@ def psi(t: np.ndarray) -> np.ndarray:
     return 2 * (((t - 3) ** 3 )/ 500 + np.exp(-6 * ((t-5) ** 2) ) - np.sqrt(t) + np.log(25 * (t ** 2) + 5) + np.sin(t)  - 7)
 
 def f(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
-    # original f: 100 + 10 * s * psi(t) - (s * psi(t) - 2) * p**3
     return 125 + 20 * np.log2(s) * psi(t) - 1.5 * s + (s * psi(t) - s ** 0.5) * p
 
 def generate_test_demand_design_parcs_revise(parcs_config: Union[Path, str]) -> TestDataSet:

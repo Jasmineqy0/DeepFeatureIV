@@ -17,6 +17,5 @@ def emotion(data):
 
 
 def noise_demand(data):
-    rescaled_time = rescale_t(data['time'])
-    assert  np.all(rescaled_time <= 1) and np.all(rescaled_time >= 0), 'rescaled time is not in [0, 1]'
-    return np.random.normal(data['rho']*data['noise_price'], rescaled_time * data['sigma'], size=len(data))
+    scaled_noise_price = 1 / (1 + np.exp(-data['noise_price']))
+    return np.random.normal(data['rho']*data['noise_price'], scaled_noise_price * (1-data['rho']**2), size=len(data))
