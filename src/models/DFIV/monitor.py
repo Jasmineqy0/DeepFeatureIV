@@ -7,6 +7,8 @@ import wandb
 
 from src.data.data_class import TrainDataSetTorch, TestDataSetTorch
 from src.models.DFIV.model import DFIVModel
+from math import inf
+import numpy as np
 from src.utils.pytorch_linear_reg_utils import linear_reg_loss, fit_linear, linear_reg_pred
 
 
@@ -24,6 +26,7 @@ class DFIVMonitor:
                         "stage2_insample_loss": [],
                         "stage2_outsample_loss": [],
                         "test_loss": []}
+        self.min_test_loss = inf
 
         self.dump_folder: Path = dump_folder
         self.trainer: DFIVTrainer = trainer
@@ -122,4 +125,28 @@ class DFIVMonitor:
             wandb.log({"stage 1 val loss": stage1_outsample.item(), "epoch": epoch})
             wandb.log({"stage 2 val loss": stage2_outsample.item(), "epoch": epoch})
             wandb.log({"test loss": test_loss.item(), "epoch": epoch})
-
+            
+            if test_loss.item() < self.min_test_loss:
+                wandb.run.summary["min_test_loss"] = test_loss.item()
+                wandb.run.summary["min_test_loss_epoch"] = epoch
+                self.min_test_loss = test_loss
+                
+                res_dict = {'treatment': self.test_data_t.treatment.detach().cpu().numpy(), 
+                            'covariate': self.test_data_t.covariate.detach().cpu().numpy() if self.test_data_t.covariate is not None else np.array([]), 
+                            'prediction': test_pred.detach().cpu().numpy(), 
+                            'target': self.test_data_t.structural.detach().cpu().numpy(),
+                            'oos_loss': test_loss.item() }
+                
+                # save treatment, covariate, prediction, target(structural) & oos_loss
+                res_path = Path(self.dump_folder) / 'result.npz'
+                np.savez(res_path, **res_dict)
+                wandb.save(str(res_path), policy='now')    
+                
+                # save model
+                model_path = Path(self.dump_folder) / 'model.pth'
+                torch.save({
+                    'treatment_net': self.trainer.treatment_net.state_dict(),
+                    'covariate_net': self.trainer.covariate_net.state_dict() if self.trainer.covariate_net else None,
+                    'stage_2_weight': stage2_weight
+                }, model_path)
+                wandb.save(str(model_path), policy='now')

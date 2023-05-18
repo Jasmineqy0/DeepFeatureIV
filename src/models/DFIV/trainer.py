@@ -146,20 +146,21 @@ class DFIVTrainer(object):
             
         # evaluate
         res = mdl.evaluate_t(test_data_t)
-        # save treatment, covariate, prediction, target(structural) & oos_loss
-        res_dict = {key: res[key] for key in res.keys()}
-        res_path = Path(self.dump_folder) / 'result.npz'
-        np.savez(res_path, **res_dict)
-        wandb.save(str(res_path), policy='now')    
         
-        # save model
-        model_path = Path(self.dump_folder) / 'model.pth'
-        torch.save({
-            'treatment_net': self.treatment_net.state_dict(),
-            'covariate_net': self.covariate_net.state_dict() if self.covariate_net else None,
-            'stage_2_weight': mdl.stage2_weight
-        }, model_path)
-        wandb.save(str(model_path), policy='now')
+        # # save treatment, covariate, prediction, target(structural) & oos_loss
+        # res_dict = {key: res[key] for key in res.keys()}
+        # res_path = Path(self.dump_folder) / 'result.npz'
+        # np.savez(res_path, **res_dict)
+        # wandb.save(str(res_path), policy='now')    
+        
+        # # save model
+        # model_path = Path(self.dump_folder) / 'model.pth'
+        # torch.save({
+        #     'treatment_net': self.treatment_net.state_dict(),
+        #     'covariate_net': self.covariate_net.state_dict() if self.covariate_net else None,
+        #     'stage_2_weight': mdl.stage2_weight
+        # }, model_path)
+        # wandb.save(str(model_path), policy='now')
         
         # wandb finishes
         wandb.finish()
