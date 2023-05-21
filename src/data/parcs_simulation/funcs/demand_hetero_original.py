@@ -15,5 +15,7 @@ def outcome(data):
 def emotion(data):
     return np.random.choice(7, len(data), replace=True) + 1
 
+
 def noise_demand(data):
-    return np.random.normal(data['rho']*data['noise_price'], np.sqrt(1-data['rho']**2), size=len(data))
+    scaled_noise_price = 1 / (1 + np.exp(-data['noise_price']))
+    return np.random.normal(data['rho']*data['noise_price'], scaled_noise_price * np.sqrt((1-data['rho']**2)), size=len(data))

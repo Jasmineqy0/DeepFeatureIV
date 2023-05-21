@@ -18,12 +18,12 @@ logger = logging.getLogger()
 
 
 def build_extractor(data_name: str, **args) -> Tuple[nn.Module, nn.Module, Optional[nn.Module]]:
-    if data_name == "demand" or data_name == "demand_parcs":
+    if data_name in ['demand', 'demand_revise', 'demand_parcs', 'demand_parcs_revise']:
         logger.info("build without image")
         return build_net_for_demand()
-    if data_name == "demand_parcs_revise":
-        logger.info("build without image")
-        return build_net_for_demand_revise()
+    # elif data_name == "demand_parcs_revise":
+    #     logger.info("build without image")
+    #     return build_net_for_demand_revise()
     elif data_name == "demand_image":
         logger.info("build with image")
         return build_net_for_demand_image()

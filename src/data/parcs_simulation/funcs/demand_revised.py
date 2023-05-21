@@ -1,7 +1,7 @@
 import numpy as np
 from src.data.demand_design import psi, f
 
-FUNCTION = 'original'
+FUNCTION = 'revised'
 
 def price(data):
     return 25 + (data['cost_fuel'] + 3) * psi(FUNCTION, data['time']) + data['noise_price']

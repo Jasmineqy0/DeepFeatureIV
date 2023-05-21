@@ -17,11 +17,12 @@ def load_dfiv_runs(entity, project, filters=None):
     runs = api.runs(entity + "/" + project, filters=filters) 
 
     summary_list, config_list, name_list = [], [], []
-    id_list, state_list = [], []
+    id_list, state_list, history_list = [], [], []
     for run in runs: 
         # .summary contains output keys/values for 
         # metrics such as accuracy.
         #  We call ._json_dict to omit large files 
+        history_list.append(run.history())
         summary_list.append(run.summary._json_dict)
 
         # .config contains the hyperparameters.
@@ -44,7 +45,8 @@ def load_dfiv_runs(entity, project, filters=None):
         "config": config_list,
         "name": name_list,
         'id': id_list,
-        'state': state_list
+        'state': state_list,
+        'history': history_list
         })
 
     return runs_df
