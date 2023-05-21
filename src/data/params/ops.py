@@ -14,6 +14,16 @@ CONFIG_FILE = 'sweep.yml'
 
 BOOTSTRAP_SIZE = 5000
 
+def get_parcs_config_name(hetero: bool, function: str):
+    hetero_str = '_hetero' if hetero else ''
+    if function == 'original':
+        config_name = f'demand{hetero_str}_original'
+    elif function == 'revised':
+        config_name = f'demand{hetero_str}_revised'
+    else:
+        raise ValueError(f'error: function {function} is not valid.')
+    return config_name
+
 def generate_data_config_info(guideline_path, fully_random_num, bootsrap_seed):
     config_file, var_info_file = 'config.yml', 'var_info.yml'
     guideline_path = Path(guideline_path)
@@ -76,6 +86,6 @@ def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
 
 def revise_parcs_config(data_param):
      # revise parcs' config for different rho and sigma in demand simulation
-    if 'demand' in data_param['data_name'] and 'parcs_config' in data_param:
-            assert all(key in data_param for key in ['rho', 'sigma', 'parcs_config']), f'error: parcs simulation requires rho, sigma and parcs_config'
-            constant_rho_sigma(data_param['rho'], data_param['sigma'], data_param['parcs_config'])
+    if data_param['data_name'] == 'demand_parcs':
+            config_name = get_parcs_config_name(data_param['hetero'], data_param['function'])
+            constant_rho_sigma(data_param['rho'], data_param['sigma'], config_name)

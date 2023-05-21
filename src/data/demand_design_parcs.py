@@ -7,6 +7,7 @@ from pathlib import Path
 from ..data.data_class import TrainDataSet, TestDataSet
 from ..data.parcs_simulation.parcs_simulate import get_config_file
 from src.data.demand_design import f
+from src.data.params.ops import get_parcs_config_name
 
 from pyparcs.cdag.graph_objects import Graph
 from pyparcs.graph_builder.parsers import graph_file_parser
@@ -63,13 +64,7 @@ def generate_train_demand_design_parcs(data_size: int,
     train_data : TrainDataSet
     """
     # obtain the parcs config name
-    hetero_str = '_hetero' if hetero else ''
-    if function == 'original':
-        parcs_config = f'demand{hetero_str}_original'
-    elif function == 'revised':
-        parcs_config = f'demand{hetero_str}_revised'
-    else:
-        raise ValueError(f'error: function {function} is not valid.')
+    parcs_config = get_parcs_config_name(hetero, function)
     
     # obtain the graph
     config_yml = get_config_file(parcs_config)
