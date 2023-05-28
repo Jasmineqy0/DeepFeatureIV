@@ -3,6 +3,7 @@ import numpy as np
 
 from .demand_design_image import generate_test_demand_design_image, generate_train_demand_design_image
 from .demand_design import generate_test_demand_design, generate_train_demand_design
+from .demand_design_test import generate_train_demand_design_test, generate_test_demand_design_test
 from .demand_design_parcs import generate_train_demand_design_parcs, generate_test_demand_design_parcs
 from .dsprine import generate_train_dsprite, generate_test_dsprite
 from .spaceiv import generate_train_spaceiv, generate_test_spaceiv
@@ -13,10 +14,13 @@ from .fully_random_iv import generate_train_fully_random_iv, generate_test_fully
 def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args) -> TrainDataSet:
     if data_name == "demand":
         return generate_train_demand_design(args["data_size"], args["rho"], args['function'], 
-                                            args['noise_price_mean'], args['noise_price_std'], args['hetero'],
+                                            args['noise_price_mean'], args['noise_price_std'], args['hetero'], args['uniform_iv'],
                                             rand_seed, False)
+    elif data_name == 'demand_test':
+        return generate_train_demand_design_test(args["data_size"], args['function'], args['noise_price_mean'], args['noise_price_std'],
+                                                 rand_seed, False)
     elif data_name == "demand_parcs":
-        return generate_train_demand_design_parcs(args['data_size'], args['function'], args['hetero'], rand_seed=rand_seed)
+        return generate_train_demand_design_parcs(args['data_size'], args['function'], args['hetero'], args['noise_price_bias'], rand_seed=rand_seed)
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
         return generate_train_demand_design(rand_seed=rand_seed, old_flg=True, **args)
@@ -35,6 +39,8 @@ def generate_train_data(data_name: str, rand_seed: int, validation: bool, **args
 def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
     if data_name == "demand":
         return generate_test_demand_design(args['function'], False)
+    elif data_name == 'demand_test':
+        return generate_test_demand_design_test(args['function'], args['noise_price_mean'], False)
     elif data_name == "demand_parcs":
         return generate_test_demand_design_parcs(args['function'])
     elif data_name == "demand_old":

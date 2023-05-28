@@ -45,6 +45,7 @@ def generate_test_demand_design_parcs(function: str) -> TestDataSet:
 def generate_train_demand_design_parcs(data_size: int,
                                        function: str,
                                        hetero: bool = False,
+                                       noise_price_bias: Union[None, float] = None,
                                        rand_seed: int = 42,
                                        **args) -> TrainDataSet:
     """
@@ -64,7 +65,7 @@ def generate_train_demand_design_parcs(data_size: int,
     train_data : TrainDataSet
     """
     # obtain the parcs config name
-    parcs_config = get_parcs_config_name(hetero, function)
+    parcs_config = get_parcs_config_name(hetero, function, noise_price_bias)
     
     # obtain the graph
     config_yml = get_config_file(parcs_config)

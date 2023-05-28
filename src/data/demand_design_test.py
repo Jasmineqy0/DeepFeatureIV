@@ -40,14 +40,24 @@ def f_original(p: np.ndarray, t: np.ndarray, s: np.ndarray) -> np.ndarray:
     return 100 + (10 + p) * s * psi_original(t) - 2 * p
 
 
-def generate_test_demand_design(function: str = 'original', old_flg: bool = False) -> TestDataSet:
+def generate_test_demand_design_test(function: str = 'original', 
+                                     noise_price_mean: float = 0.0,
+                                     old_flg: bool = False) -> TestDataSet:
     """
     Returns
     -------
     test_data : TestDataSet
         Uniformly sampled from (p,t,s).
     """
-    price = np.linspace(10, 25, 20)
+    # obtain the approx range of the expected price
+    boostrap_size = 5000
+    time = np.linspace(0.0, 10, boostrap_size)
+    # E[C] = 0, E[V] = noise_price_mean -> E[P | t] = 25 + (0 + 3) * psi(t) + noise_price_mean
+    exp_true_price =  25 + (0 + 3) * psi(function, time) + noise_price_mean
+    exp_min_price, exp_max_price = np.round(np.min(exp_true_price)), np.round(np.max(exp_true_price))
+    
+    # intervene within the range of the expected price
+    price = np.linspace(exp_min_price, exp_max_price, 20)
     time = np.linspace(0.0, 10, 20)
     emotion = np.array([1, 2, 3, 4, 5, 6, 7])
     data = []
@@ -68,15 +78,12 @@ def generate_test_demand_design(function: str = 'original', old_flg: bool = Fals
     return test_data
 
 
-def generate_train_demand_design(data_size: int,
-                                 rho: float,
-                                 function: str = 'original',
-                                 noise_price_mean: float = 0.0,
-                                 noise_price_std: float = 1.0,
-                                 hetero: bool = False,
-                                 uniform_iv: bool = False,
-                                 rand_seed: int = 42,
-                                 old_flg: bool = False) -> TrainDataSet:
+def generate_train_demand_design_test(data_size: int,
+                                      function: str = 'original',
+                                      noise_price_mean: float = 0.0,
+                                      noise_price_std: float = 1.0,
+                                      rand_seed: int = 42,
+                                      old_flg: bool = False) -> TrainDataSet:
     """
     Parameters
     ----------
@@ -96,17 +103,12 @@ def generate_train_demand_design(data_size: int,
     rng = default_rng(seed=rand_seed)
     emotion = rng.choice(list(range(1, 8)), data_size)
     time = rng.uniform(0, 10, data_size)
-    cost = rng.uniform(-3, 3, data_size) if uniform_iv else rng.normal(0, 1.0, data_size)
+    cost = rng.normal(0, 1.0, data_size)
     noise_price = rng.normal(noise_price_mean, noise_price_std, data_size)
-    
-    scaled_noise_price = 1 / (1 + np.exp(-noise_price))
-    noise_demand_std = np.sqrt(1 - rho ** 2)
-    noise_demand_std *= noise_demand_std * scaled_noise_price if hetero else 1
-    noise_demand = rho * noise_price + rng.normal(0, noise_demand_std, data_size)
-        
+    noise_demand = rng.normal(0, 1, data_size)
     price = 25 + (cost + 3) * psi(function, time) + noise_price
     structural: np.ndarray = f(function, price, time, emotion).astype(float)
-    outcome: np.ndarray = (structural + noise_demand).astype(float)
+    outcome: np.ndarray = (structural + noise_demand + noise_price).astype(float)
     if old_flg:
         treatment = np.c_[price, time, emotion]
         instrumental = np.c_[cost, time, emotion]

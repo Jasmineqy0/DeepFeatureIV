@@ -14,10 +14,12 @@ CONFIG_FILE = 'sweep.yml'
 
 BOOTSTRAP_SIZE = 5000
 
-def get_parcs_config_name(hetero: bool, function: str):
+def get_parcs_config_name(hetero: bool, function: str, noise_price_bias: Union[None, float] = None):
     hetero_str = '_hetero' if hetero else ''
     if function == 'original':
         config_name = f'demand{hetero_str}_original'
+        if noise_price_bias is not None:
+            config_name += f'_noise_price_bias_{noise_price_bias}'
     elif function == 'revised':
         config_name = f'demand{hetero_str}_revised'
     else:
@@ -87,5 +89,8 @@ def constant_rho_sigma(rho: float, sigma: Union[None, float], config_name: str):
 def revise_parcs_config(data_param):
      # revise parcs' config for different rho and sigma in demand simulation
     if data_param['data_name'] == 'demand_parcs':
-            config_name = get_parcs_config_name(data_param['hetero'], data_param['function'])
+            noise_price_bias = data_param['noise_price_bias']  if 'noise_price_bias' in data_param else None
+            config_name = get_parcs_config_name(data_param['hetero'], data_param['function'], noise_price_bias)
             constant_rho_sigma(data_param['rho'], data_param['sigma'], config_name)
+    else:
+        raise ValueError(f'error: data_name {data_param["data_name"]} is not valid for parcs.')
