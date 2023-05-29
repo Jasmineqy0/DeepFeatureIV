@@ -42,7 +42,7 @@ def generate_test_data(data_name: str, rand_seed, **args) -> TestDataSet:
     elif data_name == 'demand_test':
         return generate_test_demand_design_test(args['function'], args['noise_price_mean'], False)
     elif data_name == "demand_parcs":
-        return generate_test_demand_design_parcs(args['function'])
+        return generate_test_demand_design_parcs(args['function'], args['noise_price_bias'])
     elif data_name == "demand_old":
         # Demand design for no covariate (deprecated)
         return generate_test_demand_design(True)
