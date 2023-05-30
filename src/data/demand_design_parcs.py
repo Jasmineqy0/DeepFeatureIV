@@ -24,7 +24,7 @@ def generate_test_demand_design_parcs(function: str, noise_price_bias: Union[Non
     test_data : TestDataSet
         Uniformly sampled from (p,t,s).
     """
-        # obtain the approx range of the expected price
+    # obtain the approx range of the expected price
     boostrap_size = 5000
     time = np.linspace(0.0, 10, boostrap_size)
     # E[C] = 0, E[V] = noise_price_bias -> E[P | t] = 25 + (0 + 3) * psi(t) + noise_price_bias

@@ -1,19 +1,15 @@
 {
     "n_repeat": 30,
-    "wandb_project": "formal_5",
+    "wandb_project": "test",
     "data_configs": {
         "data_name": "demand",
-        "function": "original",
+        "function": ["original", "revised"],
         "data_size": 10000,
         "rho": [
-            0.1,
-            0.3,
-            0.5,
-            0.7,
-            0.9
+            0.5
         ],
         "hetero": false,
-        "noise_price_mean": 0,
+        "noise_price_mean": [0, 2, 4, 8, 16],
         "noise_price_std": 1
     },
     "train_configs": {

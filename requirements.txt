@@ -53,5 +53,7 @@ seaborn
 kaleido
 plotly
 ipykernel
+ipywidgets
+tqdm
 
 # install latex with the linux command: sudo apt install texlive-fonts-recommended texlive-fonts-extra dvipng

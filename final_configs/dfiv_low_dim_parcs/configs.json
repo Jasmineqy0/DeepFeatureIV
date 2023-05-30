@@ -1,11 +1,12 @@
 {
     "n_repeat": 30,
-    "wandb_project": "formal_5_parcs",
+    "wandb_project": "formal_7",
     "data_configs": {
         "data_name": "demand_parcs",
-        "hetero": [true, false],
-        "function": ["original", "revised"],
-        "data_size": 10000,
+        "hetero": [false],
+        "function": ["original"],
+        "noise_price_bias": null,
+        "data_size": [1000, 5000, 10000],
         "rho": [
             0.1,
             0.3,

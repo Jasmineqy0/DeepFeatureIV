@@ -8,9 +8,22 @@ import wandb
 import torch
 from torch import nn
 import sys
+import os
 sys.path.append(str(Path.cwd().parent))
 from src.models.DFIV.model import DFIVModel
 from src.models.DFIV.nn_structure import build_extractor
+
+PM_SIGN = '±'
+NUM_DECIMALS = 4
+
+TABLE_DIR = 'tables/'
+
+NUM_DECIMALS = 4
+
+LATEX_COL_NAMES = {'within-limit result ratio': "WL-Ratio", 
+                   "rms_loss": "RMSE",
+                   'precision_correct_parents': 'Precision',
+                   'recall_correct_parents': 'Recall'}
 
 def load_dfiv_runs(entity, project, filters=None):
     api = wandb.Api()
@@ -102,3 +115,39 @@ def predict_dfiv_model(mdl, treatment: np.ndarray, covariate: Union[None, np.nda
         covariate = torch.from_numpy(covariate).to(torch.float32)
     # predict
     return mdl.predict_t(treatment=treatment, covariate=covariate).detach().numpy()
+
+
+def create_combined_df(mean_df, std_df):
+    combined_df = mean_df.copy()
+    combined_df['rms_loss'] = combined_df['rms_loss'].astype(str)
+    combined_df['precision_correct_parents'] = combined_df['precision_correct_parents'].astype(str)
+    combined_df['recall_correct_parents'] = combined_df['recall_correct_parents'].astype(str)
+
+    for std_row, mean_row in zip(std_df.iterrows(), mean_df.iterrows()):
+        _, std_values = std_row
+        mean_idx, mean_values = mean_row
+        
+        mean_rmse, std_rmse = f"{mean_values['rms_loss']:.{NUM_DECIMALS}f}", f"{std_values['rms_loss']:.{NUM_DECIMALS}f}"
+        combined_df.at[mean_idx, 'rms_loss'] = f"{mean_rmse} {PM_SIGN} {std_rmse}"
+        
+        mean_precision, std_precision = f"{mean_values['precision_correct_parents']:.{NUM_DECIMALS}f}", f"{std_values['precision_correct_parents']:.{NUM_DECIMALS}f}"
+        combined_df.at[mean_idx, 'precision_correct_parents'] = f"{mean_precision} {PM_SIGN} {std_precision}"
+        
+        mean_recall, std_recall = f"{mean_values['recall_correct_parents']:.{NUM_DECIMALS}f}", f"{std_values['recall_correct_parents']:.{NUM_DECIMALS}f}"
+        combined_df.at[mean_idx, 'recall_correct_parents'] = f"{mean_recall} {PM_SIGN} {std_recall}"
+
+    return combined_df
+
+def create_latex_df(combined_df, keys, key_names):
+    latex_df = combined_df[[*keys, *LATEX_COL_NAMES.keys()]]
+    latex_df = latex_df.rename(columns={**{key:key_name for key, key_name in zip(keys, key_names)}, **LATEX_COL_NAMES})
+    return latex_df
+
+def convert_to_latex_table(latex_df):
+    latex_str = latex_df.to_latex(index=False, float_format="{:.2f}".format)
+    latex_str = latex_str.replace('±', '$\pm$')
+    return latex_str
+
+def save_latex_str(latex_str, file_name):
+    with open(os.path.join(TABLE_DIR, file_name), 'w') as f:
+        f.write(latex_str)
